@@ -121,7 +121,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
               {category && (
                 <p className="text-sm font-medium text-green-700">{category}</p>
               )}
-              <h1 className="mt-1 text-2xl font-bold leading-tight tracking-tight text-gray-900 sm:text-3xl md:text-4xl">
+              <h1 className="mt-1 text-2xl font-bold leading-tight tracking-tight text-gray-900 text-balance sm:text-3xl md:text-4xl">
                 {name}
               </h1>
             </div>

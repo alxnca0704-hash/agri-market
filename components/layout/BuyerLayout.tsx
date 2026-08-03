@@ -2,6 +2,7 @@
 
 import { Drawer, Layout } from "antd";
 import Image from "next/image";
+import Link from "next/link";
 import { useState } from "react";
 import BuyerHeader from "./BuyerHeader";
 import BuyerSidebar from "./BuyerSidebar";
@@ -14,7 +15,7 @@ export default function BuyerLayout({
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <Layout className="min-h-screen">
+    <Layout className="min-h-[100dvh]">
       <BuyerHeader onMenuClick={() => setDrawerOpen(true)} />
       <Layout className="flex-1">
         <Sider
@@ -24,12 +25,32 @@ export default function BuyerLayout({
           collapsedWidth={0}
           trigger={null}
           className="border-r border-gray-200 bg-white"
-          style={{ position: "sticky", top: 64, height: "calc(100vh - 64px)" }}
+          style={{ position: "sticky", top: 64, height: "calc(100dvh - 64px)" }}
         >
           <BuyerSidebar />
         </Sider>
-        <Content className="min-w-0 bg-gray-50 p-6">{children}</Content>
-      </Layout> 
+        <Content id="main" className="min-w-0 bg-gray-50 p-6">
+          {children}
+        </Content>
+      </Layout>
+
+      <footer className="flex flex-col gap-2 border-t border-gray-200 bg-white px-6 py-4 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
+        <p>&copy; 2026 AgriMarket. All rights reserved.</p>
+        <nav aria-label="Legal" className="flex items-center gap-4">
+          <Link
+            href="/buyer/privacy"
+            className="transition-colors hover:text-green-700"
+          >
+            Privacy
+          </Link>
+          <Link
+            href="/buyer/terms"
+            className="transition-colors hover:text-green-700"
+          >
+            Terms
+          </Link>
+        </nav>
+      </footer>
       <Drawer
         placement="left"
         open={drawerOpen}

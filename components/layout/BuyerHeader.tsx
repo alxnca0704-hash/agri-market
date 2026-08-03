@@ -3,7 +3,6 @@
 import { Avatar, Badge, Button, Dropdown, Input } from "antd";
 import type { MenuProps } from "antd";
 import {
-  BellOutlined,
   HeartOutlined,
   LogoutOutlined,
   MenuOutlined,
@@ -14,7 +13,6 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart";
 import { useFavorites } from "@/lib/favorites";
@@ -81,14 +79,6 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
       </div>
 
       <div className="ml-auto flex items-center gap-2">
-        <Badge count={3} size="small">
-          <Button
-            type="text"
-            shape="circle"
-            icon={<BellOutlined style={{ fontSize: 20 }} />}
-            aria-label="Notifications"
-          />
-        </Badge>
         <Badge count={favoriteCount} size="small">
           <Link href="/buyer/favorites">
             <Button

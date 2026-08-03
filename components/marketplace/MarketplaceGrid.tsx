@@ -97,7 +97,7 @@ export default function MarketplaceGrid() {
       <div className="mb-6 flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-balance">
               Marketplace
             </h1>
             {q && (

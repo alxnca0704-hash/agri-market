@@ -14,12 +14,12 @@ export default function CartPage() {
   if (lineItems.length === 0) {
     return (
       <div className="mx-auto max-w-5xl">
-        <h1 className="mb-6 text-2xl font-bold tracking-tight text-gray-900">
+        <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900 text-balance">
           Cart
         </h1>
         <Empty description="Your cart is empty">
           <Link href="/buyer/marketplace">
-            <Button type="primary" color="yellow" icon={<ShoppingCartOutlined />}>
+            <Button type="primary" icon={<ShoppingCartOutlined />}>
               Browse items
             </Button>
           </Link>
@@ -31,7 +31,7 @@ export default function CartPage() {
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold tracking-tight text-gray-900">
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-balance">
           Cart
         </h1>
         <Button
@@ -140,7 +140,6 @@ export default function CartPage() {
             </dl>
             <Button
               type="primary"
-              color="yellow"
               size="large"
               block
               className="mt-5"
