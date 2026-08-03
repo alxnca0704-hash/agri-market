@@ -49,7 +49,7 @@ export default async function ItemDetailPage({
         </svg>
         Back to marketplace
       </Link>
-      <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm md:p-10">
+      <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg shadow-green-900/[0.04] md:p-10">
         <ItemDetail item={item} />
       </div>
     </div>

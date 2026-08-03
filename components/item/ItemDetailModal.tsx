@@ -16,10 +16,16 @@ export default function ItemDetailModal({ item }: ItemDetailModalProps) {
       open
       onCancel={() => router.back()}
       footer={null}
-      width={880}
+      width="100%"
       title={null}
+      rootClassName="fullscreen-item-modal"
+      styles={{
+        body: {
+          padding: "24px 32px",
+        },
+      }}
     >
-      <div className="pt-2">
+      <div className="mx-auto max-w-6xl">
         <ItemDetail item={item} />
       </div>
     </Modal>

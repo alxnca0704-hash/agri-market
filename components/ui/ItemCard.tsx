@@ -120,7 +120,6 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
           type="primary"
           size="large"
           icon={<ShoppingCartOutlined />}
-          color="yellow"
           disabled={isOutOfStock}
           onClick={() => {
             addItem(item);
