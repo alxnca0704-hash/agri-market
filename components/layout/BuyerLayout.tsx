@@ -29,7 +29,7 @@ export default function BuyerLayout({
           <BuyerSidebar />
         </Sider>
         <Content className="min-w-0 bg-gray-50 p-6">{children}</Content>
-      </Layout>
+      </Layout> 
       <Drawer
         placement="left"
         open={drawerOpen}

@@ -4,6 +4,7 @@ import { Avatar, Badge, Button, Dropdown, Input } from "antd";
 import type { MenuProps } from "antd";
 import {
   BellOutlined,
+  HeartOutlined,
   LogoutOutlined,
   MenuOutlined,
   ProfileOutlined,
@@ -14,6 +15,9 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/lib/cart";
+import { useFavorites } from "@/lib/favorites";
 
 interface BuyerHeaderProps {
   onMenuClick: () => void;
@@ -39,6 +43,10 @@ const userMenuItems: MenuProps["items"] = [
 ];
 
 export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
+  const router = useRouter();
+  const { count: cartCount } = useCart();
+  const { count: favoriteCount } = useFavorites();
+
   return (
     <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-gray-100 bg-white px-4 shadow-sm">
       <div className="md:hidden">
@@ -68,6 +76,14 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
           prefix={<SearchOutlined className="text-gray-400" />}
           placeholder="Search products..."
           className="max-w-xs rounded-full lg:max-w-sm"
+          onPressEnter={(e) => {
+            const term = e.currentTarget.value.trim();
+            router.push(
+              term
+                ? `/buyer/marketplace?q=${encodeURIComponent(term)}`
+                : "/buyer/marketplace"
+            );
+          }}
         />
       </div>
 
@@ -80,7 +96,17 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             aria-label="Notifications"
           />
         </Badge>
-        <Badge count={2} size="small">
+        <Badge count={favoriteCount} size="small">
+          <Link href="/buyer/favorites">
+            <Button
+              type="text"
+              shape="circle"
+              icon={<HeartOutlined />}
+              aria-label="Favorites"
+            />
+          </Link>
+        </Badge>
+        <Badge count={cartCount} size="small">
           <Link href="/buyer/cart">
             <Button
               type="text"

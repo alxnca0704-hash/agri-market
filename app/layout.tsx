@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ConfigProvider } from "antd";
+import { App, ConfigProvider } from "antd";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -44,7 +44,7 @@ export default function RootLayout({
             },
           }}
         >
-          {children}
+          <App>{children}</App>
         </ConfigProvider>
       </body>
     </html>

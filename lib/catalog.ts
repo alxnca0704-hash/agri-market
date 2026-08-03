@@ -1,6 +1,33 @@
-import type { Item } from "@/lib/types";
+export type ItemStatus = "available" | "low-stock" | "out-of-stock";
 
-export const items: Item[] = [
+export interface Item {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  unit: string;
+  image?: string;
+  category?: string;
+  location?: string;
+  seller?: string;
+  rating?: number;
+  quantity?: number;
+  status: ItemStatus;
+}
+
+export type SortKey = "featured" | "price-asc" | "price-desc" | "name-asc";
+
+export interface CatalogQuery {
+  category?: string;
+  sort?: SortKey;
+  search?: string;
+  priceMin?: number;
+  priceMax?: number;
+  area?: string;
+  status?: ItemStatus;
+}
+
+const seedItems: Item[] = [
   {
     id: "urea-001",
     name: "Premium Urea Fertilizer",
@@ -8,7 +35,7 @@ export const items: Item[] = [
       "Pure nitrogen compound for broad-spectrum crop enhancement in rice and corn.",
     price: 1240.5,
     unit: "per 50kg bag",
-    image: "/items/fertilizer.svg",
+    image: "https://picsum.photos/seed/fertilizer/800/600",
     category: "Fertilizer",
     location: "Nueva Ecija",
     seller: "Luzon Agro Supplies",
@@ -23,7 +50,7 @@ export const items: Item[] = [
       "High-yield hybrid variety bred for wet-season planting with good lodging resistance.",
     price: 680,
     unit: "per 5kg pack",
-    image: "/items/seeds.svg",
+    image: "https://picsum.photos/seed/seeds/800/600",
     category: "Seeds",
     location: "Isabela",
     seller: "Maya Seed Farm",
@@ -38,7 +65,7 @@ export const items: Item[] = [
       "Nutrient-rich worm castings for soil conditioning and slow-release feeding.",
     price: 320.75,
     unit: "per 20kg bag",
-    image: "/items/soil.svg",
+    image: "https://picsum.photos/seed/soil/800/600",
     category: "Soil Amendment",
     location: "Laguna",
     seller: "GreenLoop Farms",
@@ -53,7 +80,7 @@ export const items: Item[] = [
       "Drought-tolerant hybrid corn variety suited to dry-season cultivation.",
     price: 540,
     unit: "per 4kg pack",
-    image: "/items/corn.svg",
+    image: "https://picsum.photos/seed/corn/800/600",
     category: "Seeds",
     location: "Pampanga",
     seller: "AgriCentro Pampanga",
@@ -68,7 +95,7 @@ export const items: Item[] = [
       "Fast-absorbing foliar formula that boosts flowering and fruit setting.",
     price: 899,
     unit: "per 1L bottle",
-    image: "/items/fertilizer.svg",
+    image: "https://picsum.photos/seed/fertilizer/800/600",
     category: "Fertilizer",
     location: "Davao City",
     seller: "Davao Agrochem",
@@ -83,7 +110,7 @@ export const items: Item[] = [
       "Curated bundle of pechay, tomato, and eggplant seeds for backyard gardens.",
     price: 250,
     unit: "per box",
-    image: "/items/vegetables.svg",
+    image: "https://picsum.photos/seed/vegetables/800/600",
     category: "Seeds",
     location: "Bukidnon",
     seller: "Highland Harvest",
@@ -98,7 +125,7 @@ export const items: Item[] = [
       "Balanced starter ration for piglets with essential vitamins and minerals.",
     price: 1050,
     unit: "per 25kg sack",
-    image: "/items/feed.svg",
+    image: "https://picsum.photos/seed/feed/800/600",
     category: "Animal Feed",
     location: "Batangas",
     seller: "Batangas Feed Mill",
@@ -113,7 +140,7 @@ export const items: Item[] = [
       "Durable pair of stainless hand shovels for transplanting and soil work.",
     price: 185,
     unit: "per set of 2",
-    image: "/items/tools.svg",
+    image: "https://picsum.photos/seed/tools/800/600",
     category: "Farm Tools",
     location: "Bulacan",
     seller: "Kabo Tools",
@@ -128,7 +155,7 @@ export const items: Item[] = [
       "Broad-spectrum insecticide protecting rice and vegetable crops from pests.",
     price: 425,
     unit: "per 500mL bottle",
-    image: "/items/pesticide.svg",
+    image: "https://picsum.photos/seed/pesticide/800/600",
     category: "Pesticide",
     location: "Quezon",
     seller: "Sierra Crop Care",
@@ -138,7 +165,83 @@ export const items: Item[] = [
   },
 ];
 
-export const categories = [
-  "All",
-  ...Array.from(new Set(items.map((item) => item.category).filter(Boolean))),
-] as string[];
+export function getCategories(): string[] {
+  return Array.from(
+    new Set(
+      seedItems
+        .map((item) => item.category)
+        .filter((category): category is string => category !== undefined)
+    )
+  );
+}
+
+export function getLocations(): string[] {
+  return Array.from(
+    new Set(
+      seedItems
+        .map((item) => item.location)
+        .filter((location): location is string => location !== undefined)
+    )
+  );
+}
+
+export function getItem(id: string): Item | undefined {
+  return seedItems.find((item) => item.id === id);
+}
+
+export function listItems(query: CatalogQuery = {}): Item[] {
+  const {
+    category,
+    sort = "featured",
+    search,
+    priceMin,
+    priceMax,
+    area,
+    status,
+  } = query;
+  const term = search?.trim().toLowerCase();
+
+  const filtered = seedItems.filter((item) => {
+    if (category !== undefined && item.category !== category) {
+      return false;
+    }
+    if (area !== undefined && item.location !== area) {
+      return false;
+    }
+    if (status !== undefined && item.status !== status) {
+      return false;
+    }
+    if (priceMin !== undefined && item.price < priceMin) {
+      return false;
+    }
+    if (priceMax !== undefined && item.price > priceMax) {
+      return false;
+    }
+    if (term) {
+      const haystack = [
+        item.name,
+        item.description,
+        item.seller,
+        item.category,
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase();
+      if (!haystack.includes(term)) {
+        return false;
+      }
+    }
+    return true;
+  });
+
+  switch (sort) {
+    case "price-asc":
+      return [...filtered].sort((a, b) => a.price - b.price);
+    case "price-desc":
+      return [...filtered].sort((a, b) => b.price - a.price);
+    case "name-asc":
+      return [...filtered].sort((a, b) => a.name.localeCompare(b.name));
+    default:
+      return filtered;
+  }
+}
