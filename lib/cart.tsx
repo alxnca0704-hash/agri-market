@@ -9,7 +9,7 @@ import {
 import type { Item } from "./catalog";
 import {
   cartReducer,
-  getCartCount,
+  getCartItemCount,
   getCartTotal,
   type CartLineItem,
 } from "./cart-core";
@@ -32,7 +32,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const value = useMemo<CartContextValue>(
     () => ({
       lineItems: state,
-      count: getCartCount(state),
+      count: getCartItemCount(state),
       total: getCartTotal(state),
       addItem: (item, selected = {}, quantity = 1) =>
         dispatch({ type: "add", item, selected, quantity }),

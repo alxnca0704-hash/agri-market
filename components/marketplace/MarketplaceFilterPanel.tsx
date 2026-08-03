@@ -3,28 +3,19 @@ import { Button, InputNumber, Select } from "antd";
 import { DownOutlined, FilterOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { getCategories, getLocations } from "@/lib/catalog";
-import type { ItemStatus } from "@/lib/catalog";
 
 const ALL = "All";
 const CATEGORIES = [ALL, ...getCategories()];
 const LOCATIONS = getLocations();
-
-const STATUS_OPTIONS: { value: ItemStatus; label: string }[] = [
-  { value: "available", label: "Available" },
-  { value: "low-stock", label: "Low stock" },
-  { value: "out-of-stock", label: "Out of stock" },
-];
 
 interface MarketplaceFilterPanelProps {
   category: string;
   priceMin?: number;
   priceMax?: number;
   area?: string;
-  status?: ItemStatus;
   onCategoryChange: (category: string) => void;
   onPriceChange: (min?: number, max?: number) => void;
   onAreaChange: (area?: string) => void;
-  onStatusChange: (status?: ItemStatus) => void;
   onClear: () => void;
 }
 
@@ -41,11 +32,9 @@ export default function MarketplaceFilterPanel({
   priceMin,
   priceMax,
   area,
-  status,
   onCategoryChange,
   onPriceChange,
   onAreaChange,
-  onStatusChange,
   onClear,
 }: MarketplaceFilterPanelProps) {
   const [draftMin, setDraftMin] = useState<number | null>(priceMin ?? null);
@@ -67,8 +56,7 @@ export default function MarketplaceFilterPanel({
     category !== ALL ||
     priceMin !== undefined ||
     priceMax !== undefined ||
-    area !== undefined ||
-    status !== undefined;
+    area !== undefined;
 
   const priceLabel =
     draftMin != null || draftMax != null
@@ -134,16 +122,6 @@ export default function MarketplaceFilterPanel({
           value={area}
           options={areaOptions}
           onChange={(value) => onAreaChange(value)}
-          suffixIcon={<DownOutlined />}
-          popupMatchSelectWidth={false}
-          className="min-w-28 shrink-0"
-        />
-        <Select
-          allowClear
-          placeholder="Status"
-          value={status}
-          options={STATUS_OPTIONS}
-          onChange={(value) => onStatusChange(value)}
           suffixIcon={<DownOutlined />}
           popupMatchSelectWidth={false}
           className="min-w-28 shrink-0"
@@ -229,18 +207,6 @@ export default function MarketplaceFilterPanel({
               value={area}
               options={areaOptions}
               onChange={(value) => onAreaChange(value)}
-              className="w-full"
-            />
-          </section>
-
-          <section>
-            <SectionTitle>Availability</SectionTitle>
-            <Select
-              allowClear
-              placeholder="Any status"
-              value={status}
-              options={STATUS_OPTIONS}
-              onChange={(value) => onStatusChange(value)}
               className="w-full"
             />
           </section>

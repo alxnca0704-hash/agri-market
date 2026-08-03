@@ -72,8 +72,8 @@ export function cartReducer(
   }
 }
 
-export function getCartCount(state: CartLineItem[]): number {
-  return state.reduce((sum, line) => sum + line.quantity, 0);
+export function getCartItemCount(state: CartLineItem[]): number {
+  return state.length;
 }
 
 export function getCartTotal(state: CartLineItem[]): number {

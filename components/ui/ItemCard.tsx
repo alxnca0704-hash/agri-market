@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Item } from "@/lib/catalog";
 import { formatPrice } from "@/components/item/formatPrice";
-import StatusBadge from "@/components/item/StatusBadge";
 import FavoriteButton from "@/components/item/FavoriteButton";
 
 interface ItemCardProps {
@@ -28,7 +27,6 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
   } = item;
   const hasOptions = (item.options?.length ?? 0) > 0;
   const isOutOfStock = status === "out-of-stock";
-  const showStatus = status !== "available";
 
   const cardClasses = [
     "group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200/60 bg-white transition-[border-color,box-shadow] duration-300 hover:border-gray-300 hover:shadow-lg hover:shadow-gray-900/[0.06] focus-within:ring-2 focus-within:ring-green-600/50 focus-within:ring-offset-2",
@@ -59,7 +57,6 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
           <h3 className="line-clamp-2 text-sm font-semibold leading-snug tracking-tight text-gray-900 sm:text-base">
             {name}
           </h3>
-          {showStatus && <StatusBadge status={status} />}
         </div>
 
         {(seller || location) && (

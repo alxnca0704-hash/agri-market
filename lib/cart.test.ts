@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { cartReducer, getCartCount, getCartTotal } from "./cart-core";
+import { cartReducer, getCartItemCount, getCartTotal } from "./cart-core";
 import type { Item } from "./catalog";
 
 const itemA: Item = {
@@ -236,7 +236,7 @@ describe("cartReducer remove / update / clear", () => {
 });
 
 describe("cart selectors", () => {
-  test("count sums quantities across lines", () => {
+  test("count counts distinct items, not quantity", () => {
     const state = cartReducer(
       cartReducer([], {
         type: "add",
@@ -246,7 +246,20 @@ describe("cart selectors", () => {
       }),
       { type: "add", item: itemA, selected: {}, quantity: 2 }
     );
-    expect(getCartCount(state)).toBe(4);
+    expect(getCartItemCount(state)).toBe(1);
+  });
+
+  test("counts different items as separate lines", () => {
+    const state = cartReducer(
+      cartReducer([], {
+        type: "add",
+        item: itemA,
+        selected: {},
+        quantity: 4,
+      }),
+      { type: "add", item: itemB, selected: {}, quantity: 1 }
+    );
+    expect(getCartItemCount(state)).toBe(2);
   });
 
   test("total sums unit price times quantity", () => {
@@ -266,7 +279,7 @@ describe("cart selectors", () => {
   });
 
   test("count and total are 0 for an empty cart", () => {
-    expect(getCartCount([])).toBe(0);
+    expect(getCartItemCount([])).toBe(0);
     expect(getCartTotal([])).toBe(0);
   });
 });

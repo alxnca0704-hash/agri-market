@@ -5,7 +5,7 @@ import { DownOutlined } from "@ant-design/icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import ItemCard from "@/components/ui/ItemCard";
 import MarketplaceFilterPanel from "./MarketplaceFilterPanel";
-import { listItems, type ItemStatus, type SortKey } from "@/lib/catalog";
+import { listItems, type SortKey } from "@/lib/catalog";
 
 const SORT_OPTIONS: { value: SortKey; label: string }[] = [
   { value: "featured", label: "Featured" },
@@ -23,7 +23,6 @@ interface FilterParams {
   priceMin?: number;
   priceMax?: number;
   area?: string;
-  status?: string;
 }
 
 function buildUrl(params: FilterParams): string {
@@ -38,7 +37,6 @@ function buildUrl(params: FilterParams): string {
   if (params.priceMin != null) search.set("priceMin", String(params.priceMin));
   if (params.priceMax != null) search.set("priceMax", String(params.priceMax));
   if (params.area) search.set("area", params.area);
-  if (params.status) search.set("status", params.status);
   const qs = search.toString();
   return qs ? `/buyer/marketplace?${qs}` : "/buyer/marketplace";
 }
@@ -59,7 +57,6 @@ export default function MarketplaceGrid() {
   const priceMin = parseOptionalNumber(searchParams.get("priceMin"));
   const priceMax = parseOptionalNumber(searchParams.get("priceMax"));
   const area = searchParams.get("area") ?? undefined;
-  const status = (searchParams.get("status") as ItemStatus) ?? undefined;
 
   const filteredItems = useMemo(
     () =>
@@ -70,9 +67,8 @@ export default function MarketplaceGrid() {
         priceMin,
         priceMax,
         area,
-        status,
-      }),
-    [category, sortKey, q, priceMin, priceMax, area, status]
+      }).filter((item) => (item.quantity ?? 0) > 0),
+    [category, sortKey, q, priceMin, priceMax, area]
   );
 
   const apply = (updates: FilterParams) =>
@@ -84,7 +80,6 @@ export default function MarketplaceGrid() {
         priceMin,
         priceMax,
         area,
-        status,
         ...updates,
       })
     );
@@ -94,9 +89,8 @@ export default function MarketplaceGrid() {
   const setPrice = (min?: number, max?: number) =>
     apply({ priceMin: min, priceMax: max });
   const setArea = (nextArea?: string) => apply({ area: nextArea });
-  const setStatus = (nextStatus?: ItemStatus) => apply({ status: nextStatus });
   const clearFilters = () =>
-    apply({ category: ALL, priceMin: undefined, priceMax: undefined, area: undefined, status: undefined });
+    apply({ category: ALL, priceMin: undefined, priceMax: undefined, area: undefined });
 
   return (
     <div>
@@ -136,11 +130,9 @@ export default function MarketplaceGrid() {
           priceMin={priceMin}
           priceMax={priceMax}
           area={area}
-          status={status}
           onCategoryChange={setCategory}
           onPriceChange={setPrice}
           onAreaChange={setArea}
-          onStatusChange={setStatus}
           onClear={clearFilters}
         />
 
