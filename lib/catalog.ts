@@ -9,6 +9,18 @@ export interface Review {
   comment: string;
 }
 
+export interface ItemOptionChoice {
+  value: string;
+  label: string;
+  price: number;
+}
+
+export interface ItemOption {
+  id: string;
+  label: string;
+  choices: ItemOptionChoice[];
+}
+
 export interface Item {
   id: string;
   name: string;
@@ -24,6 +36,7 @@ export interface Item {
   quantity?: number;
   status: ItemStatus;
   reviews?: Review[];
+  options?: ItemOption[];
 }
 
 export type SortKey = "featured" | "price-asc" | "price-desc" | "name-asc";
@@ -58,6 +71,16 @@ const seedItems: Item[] = [
     rating: 4.8,
     quantity: 24,
     status: "available",
+    options: [
+      {
+        id: "size",
+        label: "Package size",
+        choices: [
+          { value: "25kg", label: "25 kg bag", price: 700 },
+          { value: "50kg", label: "50 kg bag", price: 1240.5 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "urea-r1",
@@ -104,6 +127,17 @@ const seedItems: Item[] = [
     rating: 4.7,
     quantity: 8,
     status: "low-stock",
+    options: [
+      {
+        id: "size",
+        label: "Pack size",
+        choices: [
+          { value: "1kg", label: "1 kg pack", price: 150 },
+          { value: "5kg", label: "5 kg pack", price: 680 },
+          { value: "10kg", label: "10 kg pack", price: 1290 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "seed-014-r1",
@@ -196,6 +230,17 @@ const seedItems: Item[] = [
     rating: 4.5,
     quantity: 15,
     status: "available",
+    options: [
+      {
+        id: "size",
+        label: "Pack size",
+        choices: [
+          { value: "2kg", label: "2 kg pack", price: 290 },
+          { value: "4kg", label: "4 kg pack", price: 540 },
+          { value: "10kg", label: "10 kg pack", price: 1250 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "corn-031-r1",
@@ -242,6 +287,17 @@ const seedItems: Item[] = [
     rating: 4.6,
     quantity: 30,
     status: "available",
+    options: [
+      {
+        id: "size",
+        label: "Bottle size",
+        choices: [
+          { value: "250ml", label: "250 mL", price: 260 },
+          { value: "500ml", label: "500 mL", price: 480 },
+          { value: "1l", label: "1 L", price: 899 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "fert-092-r1",
@@ -288,6 +344,17 @@ const seedItems: Item[] = [
     rating: 4.4,
     quantity: 6,
     status: "low-stock",
+    options: [
+      {
+        id: "type",
+        label: "Bundle type",
+        choices: [
+          { value: "leafy", label: "Leafy (pechay + mustard)", price: 180 },
+          { value: "fruiting", label: "Fruiting (tomato + eggplant)", price: 220 },
+          { value: "mixed", label: "Mixed (all five)", price: 250 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "seed-056-r1",
@@ -334,6 +401,16 @@ const seedItems: Item[] = [
     rating: 4.3,
     quantity: 18,
     status: "available",
+    options: [
+      {
+        id: "size",
+        label: "Sack size",
+        choices: [
+          { value: "10kg", label: "10 kg sack", price: 450 },
+          { value: "25kg", label: "25 kg sack", price: 1050 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "feed-021-r1",
@@ -380,6 +457,16 @@ const seedItems: Item[] = [
     rating: 4.2,
     quantity: 40,
     status: "available",
+    options: [
+      {
+        id: "type",
+        label: "Handle",
+        choices: [
+          { value: "steel", label: "Stainless steel", price: 185 },
+          { value: "grip", label: "Comfort grip", price: 220 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "tool-018-r1",
@@ -426,6 +513,17 @@ const seedItems: Item[] = [
     rating: 4.5,
     quantity: 5,
     status: "low-stock",
+    options: [
+      {
+        id: "size",
+        label: "Bottle size",
+        choices: [
+          { value: "250ml", label: "250 mL", price: 240 },
+          { value: "500ml", label: "500 mL", price: 425 },
+          { value: "1l", label: "1 L", price: 790 },
+        ],
+      },
+    ],
     reviews: [
       {
         id: "pest-033-r1",
@@ -534,4 +632,76 @@ export function listItems(query: CatalogQuery = {}): Item[] {
     default:
       return filtered;
   }
+}
+
+function findChoice(
+  item: Item,
+  optionId: string,
+  value: string
+): ItemOptionChoice | undefined {
+  return item.options
+    ?.find((option) => option.id === optionId)
+    ?.choices.find((choice) => choice.value === value);
+}
+
+export function getItemOptionPrice(
+  item: Item,
+  selected: Record<string, string>
+): number {
+  if (item.options) {
+    for (const option of item.options) {
+      const value = selected[option.id];
+      if (value !== undefined) {
+        const choice = findChoice(item, option.id, value);
+        if (choice) {
+          return choice.price;
+        }
+      }
+    }
+  }
+  return item.price;
+}
+
+export function getItemOptionLabel(
+  item: Item,
+  selected: Record<string, string>
+): string {
+  if (!item.options) {
+    return "";
+  }
+  return item.options
+    .map((option) => {
+      const value = selected[option.id];
+      if (value === undefined) {
+        return null;
+      }
+      return (
+        findChoice(item, option.id, value)?.label ??
+        value
+      );
+    })
+    .filter((label): label is string => label !== null)
+    .join(" \u00b7 ");
+}
+
+export function buildCartKey(
+  item: Item,
+  selected: Record<string, string>
+): string {
+  const segments = (item.options ?? [])
+    .map((option) => {
+      const value = selected[option.id];
+      return value !== undefined ? `${option.id}=${value}` : null;
+    })
+    .filter((segment): segment is string => segment !== null)
+    .sort();
+  return segments.length > 0 ? `${item.id}::${segments.join(":")}` : item.id;
+}
+
+export function buildDefaultSelection(item: Item): Record<string, string> {
+  const selection: Record<string, string> = {};
+  for (const option of item.options ?? []) {
+    selection[option.id] = option.choices[0]?.value ?? "";
+  }
+  return selection;
 }

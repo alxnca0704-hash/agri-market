@@ -3,6 +3,7 @@ import { App, Button, Empty, InputNumber } from "antd";
 import { DeleteOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { getItemOptionLabel } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/components/item/formatPrice";
 
@@ -49,7 +50,7 @@ export default function CartPage() {
         <div className="flex-1 space-y-4">
           {lineItems.map((line) => (
             <div
-              key={line.item.id}
+              key={line.key}
               className="flex gap-4 rounded-2xl border border-gray-200 bg-white p-4"
             >
               <Link
@@ -76,7 +77,16 @@ export default function CartPage() {
                     >
                       {line.item.name}
                     </Link>
-                    <p className="text-sm text-gray-400">{line.item.unit}</p>
+                    <p className="text-sm text-gray-400">
+                      {line.item.unit}
+                      {(() => {
+                        const variant = getItemOptionLabel(
+                          line.item,
+                          line.selected
+                        );
+                        return variant ? ` \u00b7 ${variant}` : "";
+                      })()}
+                    </p>
                   </div>
                   <Button
                     type="text"
@@ -84,7 +94,7 @@ export default function CartPage() {
                     size="small"
                     icon={<DeleteOutlined />}
                     aria-label={`Remove ${line.item.name}`}
-                    onClick={() => removeItem(line.item.id)}
+                    onClick={() => removeItem(line.key)}
                   />
                 </div>
 
@@ -92,15 +102,16 @@ export default function CartPage() {
                   <div className="flex items-center gap-3">
                     <InputNumber
                       min={1}
+                      max={line.item.quantity}
                       value={line.quantity}
-                      onChange={(value) => updateQuantity(line.item.id, value ?? 1)}
+                      onChange={(value) => updateQuantity(line.key, value ?? 1)}
                     />
                     <span className="text-sm text-gray-500">
-                      {formatPrice(line.item.price)} each
+                      {formatPrice(line.unitPrice)} each
                     </span>
                   </div>
                   <p className="text-lg font-bold tabular-nums text-gray-900">
-                    {formatPrice(line.item.price * line.quantity)}
+                    {formatPrice(line.unitPrice * line.quantity)}
                   </p>
                 </div>
               </div>

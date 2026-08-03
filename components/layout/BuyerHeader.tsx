@@ -59,13 +59,6 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
       </div>
 
       <Link href="/buyer/marketplace" className="flex items-center gap-2">
-        <Image
-          src="/store.png"
-          alt="AgriMarket logo"
-          width={32}
-          height={32}
-          className="rounded-lg"
-        />
         <span className="hidden text-lg font-bold tracking-tight text-gray-900 sm:block">
           Agri<span className="text-green-600">Market</span>
         </span>

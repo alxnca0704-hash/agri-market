@@ -1,5 +1,5 @@
 "use client";
-import { App, Avatar, Button, Input, Rate } from "antd";
+import { App, Avatar, Button, Input, InputNumber, Rate, Segmented } from "antd";
 import {
   EnvironmentOutlined,
   ShoppingCartOutlined,
@@ -7,6 +7,11 @@ import {
 } from "@ant-design/icons";
 import { useState } from "react";
 import type { Item, Review } from "@/lib/catalog";
+import {
+  buildDefaultSelection,
+  getItemOptionLabel,
+  getItemOptionPrice,
+} from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
 import { formatPrice } from "./formatPrice";
 import StatusBadge from "./StatusBadge";
@@ -32,11 +37,17 @@ export default function ItemDetail({ item }: ItemDetailProps) {
   const [author, setAuthor] = useState("");
   const [comment, setComment] = useState("");
   const [formRating, setFormRating] = useState(5);
+  const [selection, setSelection] = useState<Record<string, string>>(() =>
+    buildDefaultSelection(item)
+  );
+  const [qty, setQty] = useState(1);
+
+  const unitPrice = getItemOptionPrice(item, selection);
+  const lineTotal = unitPrice * qty;
 
   const {
     name,
     description,
-    price,
     unit,
     image = "/store.png",
     images,
@@ -83,6 +94,20 @@ export default function ItemDetail({ item }: ItemDetailProps) {
     setComment("");
     setFormRating(5);
     message.success("Thanks for the review");
+  }
+
+  function handleOptionChange(optionId: string, value: string) {
+    setSelection((prev) => ({ ...prev, [optionId]: value }));
+  }
+
+  function handleAddToCart() {
+    addItem(item, selection, qty);
+    const variant = getItemOptionLabel(item, selection);
+    message.success(
+      variant
+        ? `${item.name} (${variant}) added to cart`
+        : `${item.name} added to cart`
+    );
   }
 
   return (
@@ -170,28 +195,66 @@ export default function ItemDetail({ item }: ItemDetailProps) {
             )}
           </dl>
 
-          <div className="mt-auto flex flex-col gap-4 border-t border-gray-100 pt-5 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
-            <div>
-              <p className="text-3xl font-bold tabular-nums text-gray-900">
-                {formatPrice(price)}
-              </p>
-              <p className="mt-1 text-sm text-gray-400">{unit}</p>
-            </div>
-            <div className="flex items-center gap-2">
-              <FavoriteButton itemId={item.id} />
-              <Button
-                type="primary"
-                size="large"
-                icon={<ShoppingCartOutlined />}
-                disabled={isOutOfStock}
-                className="flex-1 sm:flex-none"
-                onClick={() => {
-                  addItem(item);
-                  message.success(`${item.name} added to cart`);
-                }}
-              >
-                Add to Cart
-              </Button>
+          <div className="mt-auto flex flex-col gap-5 border-t border-gray-100 pt-5">
+            {item.options?.map((option) => (
+              <div key={option.id}>
+                <p className="text-sm font-medium text-gray-700">
+                  {option.label}
+                </p>
+                <Segmented
+                  block
+                  value={selection[option.id]}
+                  disabled={isOutOfStock}
+                  onChange={(value) =>
+                    handleOptionChange(option.id, String(value))
+                  }
+                  options={option.choices.map((choice) => ({
+                    value: choice.value,
+                    label: (
+                      <span className="flex flex-col items-center py-0.5 leading-tight">
+                        <span>{choice.label}</span>
+                        <span className="text-xs font-normal text-gray-500">
+                          {formatPrice(choice.price)}
+                        </span>
+                      </span>
+                    ),
+                  }))}
+                  className="mt-2"
+                />
+              </div>
+            ))}
+
+            <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+              <div>
+                <p className="text-sm text-gray-400">Total</p>
+                <p className="text-3xl font-bold tabular-nums text-gray-900">
+                  {formatPrice(lineTotal)}
+                </p>
+                <p className="mt-1 text-sm text-gray-400">{unit}</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-500">Qty</span>
+                  <InputNumber
+                    min={1}
+                    max={item.quantity}
+                    value={qty}
+                    disabled={isOutOfStock}
+                    onChange={(value) => setQty(value ?? 1)}
+                  />
+                </div>
+                <FavoriteButton itemId={item.id} />
+                <Button
+                  type="primary"
+                  size="large"
+                  icon={<ShoppingCartOutlined />}
+                  disabled={isOutOfStock}
+                  className="flex-1 sm:flex-none"
+                  onClick={handleAddToCart}
+                >
+                  Add to Cart
+                </Button>
+              </div>
             </div>
           </div>
         </div>

@@ -1,7 +1,11 @@
 import { describe, expect, test } from "vitest";
 import {
+  buildCartKey,
+  buildDefaultSelection,
   getCategories,
   getItem,
+  getItemOptionLabel,
+  getItemOptionPrice,
   getLocations,
   listItems,
 } from "./catalog";
@@ -231,5 +235,55 @@ describe("listItems", () => {
       "tool-018",
       "pest-033",
     ]);
+  });
+});
+
+describe("item option helpers", () => {
+  const urea = getItem("urea-001")!;
+
+  test("getItemOptionPrice returns the chosen variant price", () => {
+    expect(getItemOptionPrice(urea, { size: "25kg" })).toBe(700);
+    expect(getItemOptionPrice(urea, { size: "50kg" })).toBe(1240.5);
+  });
+
+  test("getItemOptionPrice falls back to base price without options", () => {
+    const seed = getItem("seed-056")!;
+    expect(getItemOptionPrice(seed, {})).toBe(250);
+  });
+
+  test("getItemOptionPrice falls back to base price for unknown selections", () => {
+    expect(getItemOptionPrice(urea, { size: "bogus" })).toBe(1240.5);
+    expect(getItemOptionPrice(urea, {})).toBe(1240.5);
+  });
+
+  test("getItemOptionLabel joins chosen labels", () => {
+    expect(getItemOptionLabel(urea, { size: "25kg" })).toBe("25 kg bag");
+    expect(getItemOptionLabel(urea, { size: "50kg" })).toBe("50 kg bag");
+  });
+
+  test("getItemOptionLabel resolves choice labels for option items", () => {
+    const seed = getItem("seed-056")!;
+    expect(getItemOptionLabel(seed, { type: "leafy" })).toBe(
+      "Leafy (pechay + mustard)"
+    );
+  });
+
+  test("getItemOptionLabel is empty for items without options", () => {
+    const soil = getItem("soil-007")!;
+    expect(getItemOptionLabel(soil, {})).toBe("");
+  });
+
+  test("buildCartKey includes sorted option segments", () => {
+    expect(buildCartKey(urea, { size: "25kg" })).toBe("urea-001::size=25kg");
+    expect(buildCartKey(urea, { size: "50kg" })).toBe("urea-001::size=50kg");
+  });
+
+  test("buildCartKey is just the item id without options", () => {
+    const seed = getItem("seed-056")!;
+    expect(buildCartKey(seed, {})).toBe("seed-056");
+  });
+
+  test("buildDefaultSelection picks the first choice of every option", () => {
+    expect(buildDefaultSelection(urea)).toEqual({ size: "25kg" });
   });
 });

@@ -18,9 +18,9 @@ interface CartContextValue {
   lineItems: CartLineItem[];
   count: number;
   total: number;
-  addItem: (item: Item) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
+  addItem: (item: Item, selected?: Record<string, string>, quantity?: number) => void;
+  removeItem: (key: string) => void;
+  updateQuantity: (key: string, quantity: number) => void;
   clear: () => void;
 }
 
@@ -34,10 +34,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
       lineItems: state,
       count: getCartCount(state),
       total: getCartTotal(state),
-      addItem: (item) => dispatch({ type: "add", item }),
-      removeItem: (id) => dispatch({ type: "remove", id }),
-      updateQuantity: (id, quantity) =>
-        dispatch({ type: "update-quantity", id, quantity }),
+      addItem: (item, selected = {}, quantity = 1) =>
+        dispatch({ type: "add", item, selected, quantity }),
+      removeItem: (key) => dispatch({ type: "remove", key }),
+      updateQuantity: (key, quantity) =>
+        dispatch({ type: "update-quantity", key, quantity }),
       clear: () => dispatch({ type: "clear" }),
     }),
     [state]

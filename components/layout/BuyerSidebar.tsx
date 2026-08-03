@@ -3,11 +3,7 @@
 import { Menu } from "antd";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  HeartOutlined,
-  ShopOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+import { ShopOutlined } from "@ant-design/icons";
 
 interface BuyerSidebarProps {
   onNavigate?: () => void;
@@ -21,16 +17,6 @@ export default function BuyerSidebar({ onNavigate }: BuyerSidebarProps) {
       key: "/buyer/marketplace",
       icon: <ShopOutlined />,
       label: <Link href="/buyer/marketplace">Marketplace</Link>,
-    },
-    {
-      key: "/buyer/orders",
-      icon: <UnorderedListOutlined />,
-      label: <Link href="/buyer/orders">Orders</Link>,
-    },
-    {
-      key: "/buyer/favorites",
-      icon: <HeartOutlined />,
-      label: <Link href="/buyer/favorites">Favorites</Link>,
     },
   ];
 

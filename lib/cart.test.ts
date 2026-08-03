@@ -20,91 +20,249 @@ const itemB: Item = {
   status: "available",
 };
 
+const itemC: Item = {
+  id: "c",
+  name: "Item C",
+  description: "desc",
+  price: 100,
+  unit: "each",
+  status: "available",
+  quantity: 5,
+  options: [
+    {
+      id: "size",
+      label: "Size",
+      choices: [
+        { value: "small", label: "Small", price: 100 },
+        { value: "large", label: "Large", price: 200 },
+      ],
+    },
+  ],
+};
+
 describe("cartReducer add", () => {
-  test("adds a new item with quantity 1", () => {
-    const state = cartReducer([], { type: "add", item: itemA });
-    expect(state).toEqual([{ item: itemA, quantity: 1 }]);
+  test("adds a new item with the requested quantity", () => {
+    const state = cartReducer([], {
+      type: "add",
+      item: itemA,
+      selected: {},
+      quantity: 3,
+    });
+    expect(state).toEqual([
+      {
+        key: "a",
+        item: itemA,
+        selected: {},
+        unitPrice: 100,
+        quantity: 3,
+      },
+    ]);
   });
 
-  test("increments quantity when adding the same item again", () => {
-    const once = cartReducer([], { type: "add", item: itemA });
-    const twice = cartReducer(once, { type: "add", item: itemA });
-    expect(twice).toEqual([{ item: itemA, quantity: 2 }]);
+  test("increments quantity when adding the same variant again", () => {
+    const once = cartReducer([], {
+      type: "add",
+      item: itemA,
+      selected: {},
+      quantity: 1,
+    });
+    const twice = cartReducer(once, {
+      type: "add",
+      item: itemA,
+      selected: {},
+      quantity: 2,
+    });
+    expect(twice).toEqual([
+      {
+        key: "a",
+        item: itemA,
+        selected: {},
+        unitPrice: 100,
+        quantity: 3,
+      },
+    ]);
   });
 
   test("keeps distinct items as separate lines", () => {
     const state = cartReducer(
-      cartReducer([], { type: "add", item: itemA }),
-      { type: "add", item: itemB }
+      cartReducer([], {
+        type: "add",
+        item: itemA,
+        selected: {},
+        quantity: 1,
+      }),
+      { type: "add", item: itemB, selected: {}, quantity: 1 }
     );
     expect(state).toHaveLength(2);
+  });
+
+  test("uses the selected variant price as unit price", () => {
+    const state = cartReducer([], {
+      type: "add",
+      item: itemC,
+      selected: { size: "large" },
+      quantity: 1,
+    });
+    expect(state[0].key).toBe("c::size=large");
+    expect(state[0].unitPrice).toBe(200);
+  });
+
+  test("keeps different variants of the same item as separate lines", () => {
+    const small = cartReducer([], {
+      type: "add",
+      item: itemC,
+      selected: { size: "small" },
+      quantity: 1,
+    });
+    const both = cartReducer(small, {
+      type: "add",
+      item: itemC,
+      selected: { size: "large" },
+      quantity: 1,
+    });
+    expect(both).toHaveLength(2);
+    expect(both.map((line) => line.key)).toEqual([
+      "c::size=small",
+      "c::size=large",
+    ]);
+  });
+
+  test("caps merged quantity at the item stock", () => {
+    const start = cartReducer([], {
+      type: "add",
+      item: itemC,
+      selected: { size: "small" },
+      quantity: 3,
+    });
+    const state = cartReducer(start, {
+      type: "add",
+      item: itemC,
+      selected: { size: "small" },
+      quantity: 5,
+    });
+    expect(state[0].quantity).toBe(5);
   });
 });
 
 describe("cartReducer remove / update / clear", () => {
-  test("removes an item by id", () => {
-    const start = cartReducer(cartReducer([], { type: "add", item: itemA }), {
-      type: "add",
-      item: itemB,
-    });
-    expect(cartReducer(start, { type: "remove", id: "a" })).toEqual([
-      { item: itemB, quantity: 1 },
-    ]);
+  test("removes a line by composite key", () => {
+    const start = cartReducer(
+      cartReducer([], {
+        type: "add",
+        item: itemA,
+        selected: {},
+        quantity: 1,
+      }),
+      { type: "add", item: itemC, selected: { size: "small" }, quantity: 1 }
+    );
+    expect(cartReducer(start, { type: "remove", key: "a" })).toHaveLength(1);
+    expect(
+      cartReducer(start, { type: "remove", key: "a" })[0].key
+    ).toBe("c::size=small");
   });
 
-  test("updates quantity", () => {
-    const start = cartReducer([], { type: "add", item: itemA });
+  test("updates quantity by key", () => {
+    const start = cartReducer([], {
+      type: "add",
+      item: itemA,
+      selected: {},
+      quantity: 1,
+    });
     const state = cartReducer(start, {
       type: "update-quantity",
-      id: "a",
+      key: "a",
       quantity: 5,
     });
     expect(state[0].quantity).toBe(5);
   });
 
-  test("removes the line when quantity is set to 0", () => {
-    const start = cartReducer([], { type: "add", item: itemA });
+  test("caps updated quantity at the item stock", () => {
+    const start = cartReducer([], {
+      type: "add",
+      item: itemC,
+      selected: { size: "small" },
+      quantity: 1,
+    });
     const state = cartReducer(start, {
       type: "update-quantity",
-      id: "a",
+      key: "c::size=small",
+      quantity: 99,
+    });
+    expect(state[0].quantity).toBe(5);
+  });
+
+  test("removes the line when quantity is set to 0", () => {
+    const start = cartReducer([], {
+      type: "add",
+      item: itemA,
+      selected: {},
+      quantity: 1,
+    });
+    const state = cartReducer(start, {
+      type: "update-quantity",
+      key: "a",
       quantity: 0,
     });
     expect(state).toEqual([]);
   });
 
   test("removes the line when quantity is negative", () => {
-    const start = cartReducer([], { type: "add", item: itemA });
+    const start = cartReducer([], {
+      type: "add",
+      item: itemA,
+      selected: {},
+      quantity: 1,
+    });
     const state = cartReducer(start, {
       type: "update-quantity",
-      id: "a",
+      key: "a",
       quantity: -2,
     });
     expect(state).toEqual([]);
   });
 
   test("clears the cart", () => {
-    const start = cartReducer(cartReducer([], { type: "add", item: itemA }), {
-      type: "add",
-      item: itemB,
-    });
+    const start = cartReducer(
+      cartReducer([], {
+        type: "add",
+        item: itemA,
+        selected: {},
+        quantity: 1,
+      }),
+      { type: "add", item: itemB, selected: {}, quantity: 1 }
+    );
     expect(cartReducer(start, { type: "clear" })).toEqual([]);
   });
 });
 
 describe("cart selectors", () => {
   test("count sums quantities across lines", () => {
-    const state = cartReducer(cartReducer([], { type: "add", item: itemA }), {
-      type: "add",
-      item: itemA,
-    });
-    expect(getCartCount(state)).toBe(2);
+    const state = cartReducer(
+      cartReducer([], {
+        type: "add",
+        item: itemA,
+        selected: {},
+        quantity: 2,
+      }),
+      { type: "add", item: itemA, selected: {}, quantity: 2 }
+    );
+    expect(getCartCount(state)).toBe(4);
   });
 
-  test("total sums price times quantity", () => {
-    let state = cartReducer([], { type: "add", item: itemA });
-    state = cartReducer(state, { type: "add", item: itemB });
-    state = cartReducer(state, { type: "add", item: itemB });
-    expect(getCartTotal(state)).toBe(200);
+  test("total sums unit price times quantity", () => {
+    let state = cartReducer([], {
+      type: "add",
+      item: itemA,
+      selected: {},
+      quantity: 1,
+    });
+    state = cartReducer(state, {
+      type: "add",
+      item: itemC,
+      selected: { size: "large" },
+      quantity: 2,
+    });
+    expect(getCartTotal(state)).toBe(100 + 400);
   });
 
   test("count and total are 0 for an empty cart", () => {

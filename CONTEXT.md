@@ -10,6 +10,10 @@ A marketplace user who purchases agricultural products. The buyer area of the ap
 
 A product listed for sale by a seller — e.g. a fertilizer, seed pack, or farm tool. Every Item has an `id`, `name`, `price`, `unit`, and `status` (`available`, `low-stock`, `out-of-stock`). Optional attributes: image, category, location, seller, rating, quantity.
 
+## Item options
+
+A per-product list of purchase choices a Buyer must make before adding to cart — e.g. package size (`25 kg` vs `50 kg`), bottle size (`250 mL` / `500 mL` / `1 L`), or bundle type. Each option (`ItemOption`) has an `id`, a display `label`, and a set of `choices`, and **every choice carries its own full price** (a larger bottle costs more). The Item's `price` acts as the "from" price shown on cards and filters. Pure helpers in the Catalog module resolve a selection: `getItemOptionPrice` (chosen price or fallback), `getItemOptionLabel` (human text for the cart), `buildCartKey` (stable per-variant identity), and `buildDefaultSelection` (first choice of each option).
+
 ## Catalog
 
 The module that owns everything about reading items. Its interface is query-shaped: `listItems({ category?, sort?, search? })`, `getCategories()`, and `getItem(id)`. Consumers never touch the underlying data directly. Today the data source is a static seed array inside the module; a real backend can be swapped in behind this seam without touching consumers.
@@ -20,7 +24,7 @@ The screen where a Buyer browses, filters, searches, and sorts the Catalog. Filt
 
 ## Item Detail
 
-A full view of a single Item, rendered by the shared `ItemDetail` module on its own dedicated page at `/buyer/marketplace/[id]`. Every item is statically generated via `generateStaticParams` (with `dynamicParams = false`, so unknown ids 404), and all Marketplace card links navigate to that page — the same responsive layout serves both desktop and mobile. The page reads through `getItem(id)`.
+A full view of a single Item, rendered by the shared `ItemDetail` module on its own dedicated page at `/buyer/marketplace/[id]`. Every item is statically generated via `generateStaticParams` (with `dynamicParams = false`, so unknown ids 404), and all Marketplace card links navigate to that page — the same responsive layout serves both desktop and mobile. The page reads through `getItem(id)`. **This is the only place items can be added to cart**: the purchase block renders one `Segmented` selector per item option (each showing its price), a quantity stepper capped at stock, and a live total; "Add to Cart" dispatches the chosen variant and quantity. Items without options just get the quantity stepper.
 
 ## Search
 
@@ -28,7 +32,9 @@ Free-text querying of the Catalog. The buyer header's search box navigates to `/
 
 ## Cart
 
-A Buyer's set of items to purchase. The Cart module owns all cart state: its interface is `useCart()` returning `{ lineItems, count, total, addItem, removeItem, updateQuantity, clear }`. State is in-memory React context (resets on refresh) built on a pure `cartReducer` in `lib/cart.ts`. The Add to Cart buttons on cards and the Item Detail view dispatch to it, the buyer header badge reads `count`, and the cart page renders line items with quantity editing and an order summary.
+A Buyer's set of items to purchase. The Cart module owns all cart state: its interface is `useCart()` returning `{ lineItems, count, total, addItem, removeItem, updateQuantity, clear }`. State is in-memory React context (resets on refresh) built on a pure `cartReducer` in `lib/cart.ts`.
+
+Cart lines are **variant-aware**: each line stores a composite `key` (item id plus its chosen options, via `buildCartKey`), the `selected` options, a resolved `unitPrice` (from the chosen variant), and a `quantity`. `addItem(item, selected, quantity)` merges repeated identical variants (capped at stock) but keeps different variants of the same product as separate lines. `removeItem`/`updateQuantity` address lines by composite `key`. The Item Detail view is the only Add to Cart entry point — cards intentionally have no cart button. The buyer header badge reads `count`, and the cart page renders line items with variant labels, quantity editing (stock-capped), and an order summary.
 
 ## Favorites
 

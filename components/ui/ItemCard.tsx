@@ -1,10 +1,8 @@
 "use client";
-import { App, Button } from "antd";
-import { ShoppingCartOutlined, StarFilled } from "@ant-design/icons";
+import { StarFilled } from "@ant-design/icons";
 import Image from "next/image";
 import Link from "next/link";
 import type { Item } from "@/lib/catalog";
-import { useCart } from "@/lib/cart";
 import { formatPrice } from "@/components/item/formatPrice";
 import StatusBadge from "@/components/item/StatusBadge";
 import FavoriteButton from "@/components/item/FavoriteButton";
@@ -16,8 +14,6 @@ interface ItemCardProps {
 }
 
 export default function ItemCard({ item, href, className }: ItemCardProps) {
-  const { addItem } = useCart();
-  const { message } = App.useApp();
   const {
     name,
     description,
@@ -31,7 +27,7 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
     quantity,
     status,
   } = item;
-  const isOutOfStock = status === "out-of-stock";
+  const hasOptions = (item.options?.length ?? 0) > 0;
 
   const cardClasses = [
     "group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200/60 bg-white shadow-sm shadow-green-900/[0.04] transition-all duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/10",
@@ -109,6 +105,7 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
       <div className="flex items-end justify-between gap-3 border-t border-gray-100 p-4 pt-3">
         <div>
           <p className="text-lg font-bold tabular-nums text-gray-900">
+            {hasOptions && <span className="text-sm font-medium text-gray-400">from </span>}
             {formatPrice(price)}
           </p>
           <p className="mt-0.5 text-xs text-gray-400">
@@ -116,18 +113,6 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
             {quantity != null && ` \u00b7 ${quantity} left`}
           </p>
         </div>
-        <Button
-          type="primary"
-          size="large"
-          icon={<ShoppingCartOutlined />}
-          disabled={isOutOfStock}
-          onClick={() => {
-            addItem(item);
-            message.success(`${item.name} added to cart`);
-          }}
-        >
-          Add to Cart
-        </Button>
       </div>
     </article>
   );
