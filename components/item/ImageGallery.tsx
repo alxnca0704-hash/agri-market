@@ -21,7 +21,7 @@ export default function ImageGallery({ images, alt }: ImageGalleryProps) {
   }, []);
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex min-w-0 flex-col gap-3">
       <div className="group relative aspect-square overflow-hidden rounded-2xl bg-gray-100">
         <Carousel
           ref={carouselRef}
@@ -51,7 +51,7 @@ export default function ImageGallery({ images, alt }: ImageGalleryProps) {
               type="button"
               aria-label="Previous image"
               onClick={() => carouselRef.current?.prev()}
-              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-700 opacity-80 shadow-md shadow-gray-900/10 backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-600"
+              className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2.5 text-gray-700 opacity-80 shadow-md shadow-gray-900/10 backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-600"
             >
               <LeftOutlined className="text-sm" />
             </button>
@@ -59,7 +59,7 @@ export default function ImageGallery({ images, alt }: ImageGalleryProps) {
               type="button"
               aria-label="Next image"
               onClick={() => carouselRef.current?.next()}
-              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-700 opacity-80 shadow-md shadow-gray-900/10 backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-600"
+              className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-white/90 p-2.5 text-gray-700 opacity-80 shadow-md shadow-gray-900/10 backdrop-blur-sm transition-all duration-200 hover:scale-110 hover:bg-white hover:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-600"
             >
               <RightOutlined className="text-sm" />
             </button>

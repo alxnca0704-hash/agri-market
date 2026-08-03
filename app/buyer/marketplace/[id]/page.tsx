@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import ItemDetail from "@/components/item/ItemDetail";
 import { getItem, listItems } from "@/lib/catalog";
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
   return listItems().map((item) => ({ id: item.id }));
 }
@@ -49,7 +51,7 @@ export default async function ItemDetailPage({
         </svg>
         Back to marketplace
       </Link>
-      <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-lg shadow-green-900/[0.04] md:p-10">
+      <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg shadow-green-900/[0.04] sm:p-6 md:p-10">
         <ItemDetail item={item} />
       </div>
     </div>

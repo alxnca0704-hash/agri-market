@@ -86,8 +86,8 @@ export default function ItemDetail({ item }: ItemDetailProps) {
   }
 
   return (
-    <div className="flex flex-col gap-12">
-      <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+    <div className="flex flex-col gap-10 sm:gap-12">
+      <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-10">
         <ImageGallery images={galleryImages} alt={name} />
 
         <div className="flex flex-col gap-6">
@@ -96,7 +96,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
               {category && (
                 <p className="text-sm font-medium text-green-700">{category}</p>
               )}
-              <h1 className="mt-1 text-3xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl">
+              <h1 className="mt-1 text-2xl font-bold leading-tight tracking-tight text-gray-900 sm:text-3xl md:text-4xl">
                 {name}
               </h1>
             </div>
@@ -170,7 +170,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
             )}
           </dl>
 
-          <div className="mt-auto flex flex-wrap items-end justify-between gap-4 border-t border-gray-100 pt-5">
+          <div className="mt-auto flex flex-col gap-4 border-t border-gray-100 pt-5 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
             <div>
               <p className="text-3xl font-bold tabular-nums text-gray-900">
                 {formatPrice(price)}
@@ -184,6 +184,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
                 size="large"
                 icon={<ShoppingCartOutlined />}
                 disabled={isOutOfStock}
+                className="flex-1 sm:flex-none"
                 onClick={() => {
                   addItem(item);
                   message.success(`${item.name} added to cart`);

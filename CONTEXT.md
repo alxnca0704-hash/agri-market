@@ -20,7 +20,7 @@ The screen where a Buyer browses, filters, searches, and sorts the Catalog. Filt
 
 ## Item Detail
 
-A full view of a single Item, rendered by the shared `ItemDetail` module. It appears in two forms: a standalone page at `/buyer/marketplace/[id]` (hard visits, refresh, deep links) and a quick-view modal over the Marketplace (soft navigation from a card, closed via browser back). Both read through `getItem(id)`.
+A full view of a single Item, rendered by the shared `ItemDetail` module on its own dedicated page at `/buyer/marketplace/[id]`. Every item is statically generated via `generateStaticParams` (with `dynamicParams = false`, so unknown ids 404), and all Marketplace card links navigate to that page — the same responsive layout serves both desktop and mobile. The page reads through `getItem(id)`.
 
 ## Search
 
