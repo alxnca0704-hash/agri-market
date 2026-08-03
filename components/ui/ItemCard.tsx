@@ -20,7 +20,6 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
     price,
     unit,
     image = "/store.png",
-    category,
     location,
     seller,
     rating,
@@ -28,9 +27,11 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
     status,
   } = item;
   const hasOptions = (item.options?.length ?? 0) > 0;
+  const isOutOfStock = status === "out-of-stock";
+  const showStatus = status !== "available";
 
   const cardClasses = [
-    "group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200/60 bg-white shadow-sm shadow-green-900/[0.04] transition-all duration-300 hover:-translate-y-1 hover:border-green-200 hover:shadow-xl hover:shadow-green-900/10",
+    "group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200/60 bg-white transition-[border-color,box-shadow] duration-300 hover:border-gray-300 hover:shadow-lg hover:shadow-gray-900/[0.06] focus-within:ring-2 focus-within:ring-green-600/50 focus-within:ring-offset-2",
     className,
   ]
     .filter(Boolean)
@@ -43,48 +44,68 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
           src={image}
           alt={name}
           fill
-          sizes="(max-width: 768px) 100vw, 33vw"
-          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className={[
+            "object-cover transition-transform duration-500 group-hover:scale-[1.03]",
+            isOutOfStock && "grayscale",
+          ]
+            .filter(Boolean)
+            .join(" ")}
         />
-        {category && (
-          <span className="absolute left-3 top-3 rounded-lg bg-white/90 px-2.5 py-1 text-xs font-medium text-gray-700 shadow-sm shadow-gray-900/5 backdrop-blur-sm">
-            {category}
-          </span>
-        )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-2.5 p-4">
-        <div className="flex items-start justify-between gap-3">
-          <h3 className="text-lg font-semibold leading-snug tracking-tight text-gray-900">
+      <div className="flex flex-1 flex-col gap-2 p-3 sm:gap-2.5 sm:p-4">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="line-clamp-2 text-sm font-semibold leading-snug tracking-tight text-gray-900 sm:text-base">
             {name}
           </h3>
-          <StatusBadge status={status} />
+          {showStatus && <StatusBadge status={status} />}
         </div>
 
-        <p className="line-clamp-2 text-sm leading-relaxed text-gray-500">
-          {description}
-        </p>
-
-        {seller && (
-          <p className="flex items-center gap-1 text-xs text-gray-500">
-            <span>{seller}</span>
+        {(seller || location) && (
+          <p className="flex items-center gap-1.5 text-xs text-gray-500">
+            {seller && <span>{seller}</span>}
+            {seller && location && <span aria-hidden="true">·</span>}
+            {location && <span>{location}</span>}
             {rating != null && (
-              <>
-                <span className="inline-block h-0.5 w-0.5 rounded-full bg-gray-300" />
-                <span className="inline-flex items-center gap-0.5 text-amber-500">
-                  <StarFilled className="text-[11px]" />
-                  <span className="font-medium text-gray-700">
-                    {rating.toFixed(1)}
-                  </span>
+              <span className="inline-flex items-center gap-1 text-gray-600">
+                <StarFilled className="text-[11px] text-amber-500" />
+                <span className="font-medium tabular-nums">
+                  {rating.toFixed(1)}
                 </span>
-              </>
+              </span>
             )}
           </p>
         )}
 
-        {location && <p className="text-xs text-gray-400">{location}</p>}
+        {description && (
+          <p className="hidden text-sm leading-relaxed text-gray-500 sm:line-clamp-2 sm:block">
+            {description}
+          </p>
+        )}
       </div>
     </>
+  );
+
+  const footer = (
+    <footer className="flex items-end justify-between gap-3 border-t border-gray-100 p-3 pt-2.5 sm:p-4 sm:pt-3">
+      <div className="min-w-0">
+        <p className="text-base font-bold tabular-nums tracking-tight text-gray-900 sm:text-lg">
+          {hasOptions && (
+            <span className="text-xs font-medium text-gray-500 sm:text-sm">
+              from{" "}
+            </span>
+          )}
+          {formatPrice(price)}
+        </p>
+        <p className="mt-0.5 text-xs text-gray-500">{unit}</p>
+      </div>
+      {quantity != null && (
+        <p className="shrink-0 text-xs font-medium tabular-nums text-gray-500">
+          {quantity} left
+        </p>
+      )}
+    </footer>
   );
 
   return (
@@ -92,28 +113,19 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
       {href ? (
         <Link href={href} className="flex flex-1 flex-col">
           {body}
+          {footer}
         </Link>
       ) : (
-        <div className="flex flex-1 flex-col">{body}</div>
+        <div className="flex flex-1 flex-col">
+          {body}
+          {footer}
+        </div>
       )}
 
       <FavoriteButton
         itemId={item.id}
-        className="absolute right-3 top-3 z-10 bg-white/90 shadow-sm shadow-gray-900/10 backdrop-blur-sm"
+        className="absolute right-2.5 top-2.5 z-10 border border-gray-200/70 bg-white shadow-sm shadow-gray-900/5 sm:right-3 sm:top-3"
       />
-
-      <div className="flex items-end justify-between gap-3 border-t border-gray-100 p-4 pt-3">
-        <div>
-          <p className="text-lg font-bold tabular-nums text-gray-900">
-            {hasOptions && <span className="text-sm font-medium text-gray-400">from </span>}
-            {formatPrice(price)}
-          </p>
-          <p className="mt-0.5 text-xs text-gray-400">
-            {unit}
-            {quantity != null && ` \u00b7 ${quantity} left`}
-          </p>
-        </div>
-      </div>
     </article>
   );
 }

@@ -146,7 +146,7 @@ export default function MarketplaceGrid() {
 
         <div className="min-w-0 flex-1">
           {filteredItems.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[1800px]:grid-cols-5 min-[2200px]:grid-cols-6">
+            <div className="grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 min-[1800px]:grid-cols-5 min-[2200px]:grid-cols-6">
               {filteredItems.map((item) => (
                 <ItemCard
                   key={item.id}

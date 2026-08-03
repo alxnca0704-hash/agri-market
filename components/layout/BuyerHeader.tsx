@@ -59,7 +59,7 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
       </div>
 
       <Link href="/buyer/marketplace" className="flex items-center gap-2">
-        <span className="hidden text-lg font-bold tracking-tight text-gray-900 sm:block">
+        <span className="hidden text-2xl font-bold tracking-tight text-gray-900 sm:block">
           Agri<span className="text-green-600">Market</span>
         </span>
       </Link>
@@ -85,7 +85,7 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
           <Button
             type="text"
             shape="circle"
-            icon={<BellOutlined />}
+            icon={<BellOutlined style={{ fontSize: 20 }} />}
             aria-label="Notifications"
           />
         </Badge>
@@ -94,7 +94,7 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             <Button
               type="text"
               shape="circle"
-              icon={<HeartOutlined />}
+              icon={<HeartOutlined style={{ fontSize: 20 }} />}
               aria-label="Favorites"
             />
           </Link>
@@ -104,7 +104,7 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             <Button
               type="text"
               shape="circle"
-              icon={<ShoppingCartOutlined />}
+              icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
               aria-label="Cart"
             />
           </Link>
@@ -114,7 +114,7 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             type="button"
             className="ml-1 flex cursor-pointer items-center gap-2 rounded-full p-1 transition-colors hover:bg-gray-50"
           >
-            <Avatar className="bg-green-600" icon={<UserOutlined />} />
+            <Avatar size={48} className="bg-green-600" icon={<UserOutlined />} />
             <span className="hidden text-left lg:block">
               <span className="block text-sm font-medium leading-tight text-gray-900">
                 Juan Cruz
