@@ -4,7 +4,17 @@ Shared vocabulary for AgriMarket. New terms get added here when they become load
 
 ## Buyer
 
-A marketplace user who purchases agricultural products. The buyer area of the app is `/buyer/*` (Marketplace, Cart, Orders, Favorites, Profile).
+A marketplace user who purchases agricultural products — in this app the buyer is a farmer. The buyer area of the app is `/buyer/*` (Dashboard, Marketplace, Cart, Orders, Favorites, Inventory, Profile).
+
+## Dashboard
+
+The farmer-buyer's home screen at `/buyer/dashboard` (also the landing page: `/` and `/buyer` redirect here). It pulls together the other buyer modules: inventory summary cards (items, low-stock alerts), cart total, a low-stock alerts panel, quick actions into Marketplace / Inventory / Cart, a saved-items preview, and a getting-started prompt when inventory is empty. The `DashboardClient` component reads through `useCart`, `useFavorites`, and `useInventory`.
+
+## Inventory
+
+A farmer's on-hand farm supplies, tracked at `/buyer/inventory`. The Inventory module owns all inventory state: its interface is `useInventory()` returning `{ items, count, totalUnits, lowStockCount, outOfStockCount, addItem, updateItem, removeItem, adjustQuantity, clear, getItem }`. State is in-memory React context (resets on refresh) built on a pure `inventoryReducer` in `lib/inventory-core.ts`. It is a plain tracker — no pricing or valuation.
+
+Each `InventoryItem` has an `id`, `name`, `quantity`, and `lowStockThreshold`; optional `category`, `unit`, `notes`, and `image`. Status is derived (`getInventoryStatus`): `ok` above threshold, `low` at or below it, `out` at zero. Items can be added free-form or seeded from the Catalog via the add-from-catalog picker (pre-filling name, category, unit, and image). Quantity edits clamp at zero.
 
 ## Item
 

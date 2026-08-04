@@ -3,7 +3,11 @@
 import { Menu } from "antd";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ShopOutlined } from "@ant-design/icons";
+import {
+  DashboardOutlined,
+  InboxOutlined,
+  ShopOutlined,
+} from "@ant-design/icons";
 
 interface BuyerSidebarProps {
   onNavigate?: () => void;
@@ -14,11 +18,25 @@ export default function BuyerSidebar({ onNavigate }: BuyerSidebarProps) {
 
   const items = [
     {
+      key: "/buyer/dashboard",
+      icon: <DashboardOutlined />,
+      label: <Link href="/buyer/dashboard">Dashboard</Link>,
+    },
+    {
       key: "/buyer/marketplace",
       icon: <ShopOutlined />,
       label: <Link href="/buyer/marketplace">Marketplace</Link>,
     },
+    {
+      key: "/buyer/inventory",
+      icon: <InboxOutlined />,
+      label: <Link href="/buyer/inventory">Inventory</Link>,
+    },
   ];
+
+  const selectedKey =
+    items.find((item) => pathname === item.key || pathname.startsWith(`${item.key}/`))
+      ?.key ?? pathname;
 
   return (
     <aside aria-label="Buyer navigation" className="flex h-full flex-col overflow-y-auto">
@@ -26,7 +44,7 @@ export default function BuyerSidebar({ onNavigate }: BuyerSidebarProps) {
       <Menu
         mode="inline"
         items={items}
-        selectedKeys={[pathname]}
+        selectedKeys={[selectedKey]}
         onClick={onNavigate ? () => onNavigate() : undefined}
         className="!border-e-0"
       />
