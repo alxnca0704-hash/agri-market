@@ -14,6 +14,7 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/cart";
 import { useFavorites } from "@/lib/favorites";
 
@@ -57,6 +58,7 @@ function BrandMark() {
 
 export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
   const router = useRouter();
+  const { user, logout } = useAuth();
   const { count: cartCount } = useCart();
   const { count: favoriteCount } = useFavorites();
 
@@ -119,7 +121,18 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             />
           </Link>
         </Badge>
-        <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+        <Dropdown
+          menu={{
+            items: userMenuItems,
+            onClick: ({ key }) => {
+              if (key === "logout") {
+                logout();
+                router.push("/login");
+              }
+            },
+          }}
+          placement="bottomRight"
+        >
           <button
             type="button"
             className="ml-1 flex cursor-pointer items-center gap-2.5 rounded-full p-1 pr-2 transition-colors hover:bg-gray-100/80"
@@ -127,10 +140,10 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             <Avatar size={38} className="bg-green-600" icon={<UserOutlined />} />
             <span className="hidden text-left lg:block">
               <span className="block text-sm font-medium leading-tight text-gray-900">
-                Juan Cruz
+                {user?.name ?? "Guest"}
               </span>
               <span className="block text-xs leading-tight text-gray-400">
-                Buyer
+                {user ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Buyer"}
               </span>
             </span>
           </button>

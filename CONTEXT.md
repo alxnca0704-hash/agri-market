@@ -2,6 +2,10 @@
 
 Shared vocabulary for AgriMarket. New terms get added here when they become load-bearing.
 
+## Authentication
+
+Mock, client-side login at `/login`. The Auth module owns auth state: its interface is `useAuth()` returning `{ user, role, ready, login(username, password), logout() }`. The user is an `AuthUser` (`name`, `role`, `username`); roles are `buyer` and `seller`. Credentials are checked by the pure `authenticate` helper in `lib/auth-core.ts` against `DEMO_ACCOUNTS` (`buyer`/`buyer123`, `seller`/`seller123`) — the password is never stored. The session persists in localStorage under the versioned key `AUTH_STORAGE_KEY` and is restored on mount; `ready` flips true once restored so guards don't flash a redirect. Logged-out or wrong-role visits to `/buyer/*` or `/seller/*` are redirected to `/login` by `AuthGuard` in each area's layout. The login page offers tap-to-fill demo account cards.
+
 ## Buyer
 
 A marketplace user who purchases agricultural products — in this app the buyer is a farmer. The buyer area of the app is `/buyer/*` (Dashboard, Marketplace, Cart, Orders, Favorites, Inventory, Profile).
@@ -49,3 +53,11 @@ Cart lines are **variant-aware**: each line stores a composite `key` (item id pl
 ## Favorites
 
 A Buyer's saved items. The Favorites module owns all favorite state: its interface is `useFavorites()` returning `{ ids, count, isFavorite(id), toggle(id), remove(id), clear }`. State is in-memory React context (resets on refresh) built on a pure `favoritesReducer` in `lib/favorites-core.ts`. The heart toggle (`FavoriteButton`) on item cards and the Item Detail view dispatch to it, the buyer header badge reads `count`, and the favorites page resolves ids to items through `getItem(id)`.
+
+## Seller
+
+A marketplace user who lists products for sale. The seller area of the app is `/seller/*`, with its own shell (`SellerLayout` with `SellerHeader` and `SellerSidebar`) and its own `ProductsProvider`; the buyer header's user menu links here. The first seller feature is product management — see **Seller product** below. Currently the seller area is self-contained: products live in seller state and do not yet appear in the Buyer Catalog.
+
+## Seller product
+
+A product a Seller lists in their shop, managed at `/seller/products`. The Products module owns all seller-product state: its interface is `useProducts()` returning `{ products, count, inStockCount, outOfStockCount, addProduct, updateProduct, removeProduct, adjustQuantity, clear, getProduct }`. State is in-memory React context (resets on refresh) built on a pure `productsReducer` in `lib/products-core.ts`. Each `SellerProduct` has an `id`, `name`, `price`, and `quantity`; optional `category`, `unit`, `location`, `description`, and `image`. Status is derived (`getProductStatus`): `available` when quantity is above zero, `out-of-stock` at zero. The seller can add, edit, remove, and adjust stock from the products page, whose add/edit form is `ProductFormModal`.

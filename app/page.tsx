@@ -1,5 +1,24 @@
-import { redirect } from "next/navigation";
+"use client";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/lib/auth";
 
 export default function Home() {
-  redirect("/buyer/dashboard");
+  const { user, ready } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!ready) {
+      return;
+    }
+    if (!user) {
+      router.replace("/login");
+    } else if (user.role === "seller") {
+      router.replace("/seller/products");
+    } else {
+      router.replace("/buyer/dashboard");
+    }
+  }, [ready, user, router]);
+
+  return null;
 }

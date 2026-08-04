@@ -3,25 +3,25 @@
 import { Drawer, Layout } from "antd";
 import Link from "next/link";
 import { useState } from "react";
-import BuyerHeader from "./BuyerHeader";
-import BuyerSidebar from "./BuyerSidebar";
+import SellerHeader from "./SellerHeader";
+import SellerSidebar from "./SellerSidebar";
 
 const { Content } = Layout;
 
-export default function BuyerLayout({
+export default function SellerLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
     <Layout className="min-h-[100dvh]">
-      <BuyerHeader onMenuClick={() => setDrawerOpen(true)} />
+      <SellerHeader />
 
       <aside
-        aria-label="Buyer navigation"
+        aria-label="Seller navigation"
         className="fixed bottom-0 left-0 top-16 z-20 hidden w-60 flex-col border-r border-gray-200/60 bg-paper/80 backdrop-blur-md lg:flex"
       >
-        <BuyerSidebar />
+        <SellerSidebar />
       </aside>
 
       <Layout className="min-w-0 flex-1 lg:pl-60">
@@ -78,7 +78,7 @@ export default function BuyerLayout({
             AgriMarket
           </span>
         </div>
-        <BuyerSidebar onNavigate={() => setDrawerOpen(false)} />
+        <SellerSidebar onNavigate={() => setDrawerOpen(false)} />
       </Drawer>
     </Layout>
   );

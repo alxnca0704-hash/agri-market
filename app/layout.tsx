@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { App, ConfigProvider } from "antd";
 import { Outfit, Spline_Sans_Mono } from "next/font/google";
+import { AuthProvider } from "@/lib/auth";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -49,58 +50,60 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: "#3e6b4d",
-              colorInfo: "#3e6b4d",
-              colorBgLayout: "#f3f1ed",
-              colorBgContainer: "#fbfaf8",
-              colorText: "#262320",
-              colorTextSecondary: "#56504a",
-              colorTextTertiary: "#8b857c",
-              colorBorder: "#e7e4df",
-              colorBorderSecondary: "#f2f0ed",
-              colorSplit: "#e7e4df",
-              borderRadius: 10,
-              fontFamily:
-                "var(--font-outfit), ui-sans-serif, system-ui, sans-serif",
-            },
-            components: {
-              Menu: {
-                itemSelectedBg: "#e3ebe4",
-                itemSelectedColor: "#335740",
-                itemHoverBg: "#f2f0ed",
-                itemHoverColor: "#335740",
-                itemBorderRadius: 8,
-                activeBarWidth: 3,
-              },
-              Button: {
-                fontWeight: 500,
-                contentFontSizeLG: 15,
-              },
-              Badge: {
+        <AuthProvider>
+          <ConfigProvider
+            theme={{
+              token: {
                 colorPrimary: "#3e6b4d",
+                colorInfo: "#3e6b4d",
+                colorBgLayout: "#f3f1ed",
+                colorBgContainer: "#fbfaf8",
+                colorText: "#262320",
+                colorTextSecondary: "#56504a",
+                colorTextTertiary: "#8b857c",
+                colorBorder: "#e7e4df",
+                colorBorderSecondary: "#f2f0ed",
+                colorSplit: "#e7e4df",
+                borderRadius: 10,
+                fontFamily:
+                  "var(--font-outfit), ui-sans-serif, system-ui, sans-serif",
               },
-              Segmented: {
-                itemSelectedBg: "#3e6b4d",
-                itemSelectedColor: "#ffffff",
+              components: {
+                Menu: {
+                  itemSelectedBg: "#e3ebe4",
+                  itemSelectedColor: "#335740",
+                  itemHoverBg: "#f2f0ed",
+                  itemHoverColor: "#335740",
+                  itemBorderRadius: 8,
+                  activeBarWidth: 3,
+                },
+                Button: {
+                  fontWeight: 500,
+                  contentFontSizeLG: 15,
+                },
+                Badge: {
+                  colorPrimary: "#3e6b4d",
+                },
+                Segmented: {
+                  itemSelectedBg: "#3e6b4d",
+                  itemSelectedColor: "#ffffff",
+                },
+                Input: {
+                  activeShadow: "0 0 0 2px rgba(62, 107, 77, 0.15)",
+                },
+                InputNumber: {
+                  activeShadow: "0 0 0 2px rgba(62, 107, 77, 0.15)",
+                },
+                Rate: {
+                  starColor: "#c79c4f",
+                  starSize: 16,
+                },
               },
-              Input: {
-                activeShadow: "0 0 0 2px rgba(62, 107, 77, 0.15)",
-              },
-              InputNumber: {
-                activeShadow: "0 0 0 2px rgba(62, 107, 77, 0.15)",
-              },
-              Rate: {
-                starColor: "#c79c4f",
-                starSize: 16,
-              },
-            },
-          }}
-        >
-          <App>{children}</App>
-        </ConfigProvider>
+            }}
+          >
+            <App>{children}</App>
+          </ConfigProvider>
+        </AuthProvider>
       </body>
     </html>
   );
