@@ -7,9 +7,10 @@ import {
   SearchOutlined,
   ShopOutlined,
 } from "@ant-design/icons";
-import { getCategories, type Item } from "@/lib/catalog";
+import { getCategories } from "@/lib/catalog";
 import { useInventory } from "@/lib/inventory";
 import type { InventoryItem } from "@/lib/inventory-core";
+import type { OrderLine } from "@/lib/orders-core";
 import StatCard from "@/components/ui/StatCard";
 import InventoryFormModal, {
   type InventoryFormValues,
@@ -70,14 +71,15 @@ export default function InventoryClient() {
     setFormOpen(true);
   };
 
-  const pickFromCatalog = (item: Item) => {
+  const pickFromOrder = (line: OrderLine) => {
     setPickerOpen(false);
     setEditing(null);
     setPrefill({
-      name: item.name,
-      category: item.category,
-      unit: item.unit,
-      image: item.image,
+      name: line.name,
+      category: line.category,
+      unit: line.unit,
+      image: line.image,
+      quantity: line.quantity,
     });
     setFormOpen(true);
   };
@@ -108,7 +110,7 @@ export default function InventoryClient() {
         </div>
         <div className="flex items-center gap-2">
           <Button icon={<ShopOutlined />} onClick={() => setPickerOpen(true)}>
-            Add from catalog
+            Add from orders
           </Button>
           <Button
             type="primary"
@@ -168,8 +170,8 @@ export default function InventoryClient() {
             description="Your farm inventory is empty"
           >
             <p className="mx-auto max-w-sm pb-4 text-sm text-gray-500">
-              Add the seeds, fertilizer, feed, and tools you have on hand so you
-              always know what needs restocking.
+              Place an order and mark it as received to add the supplies you
+              have on hand, so you always know what needs restocking.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-2">
               <Button
@@ -183,7 +185,7 @@ export default function InventoryClient() {
                 icon={<ShopOutlined />}
                 onClick={() => setPickerOpen(true)}
               >
-                Add from catalog
+                Add from orders
               </Button>
             </div>
           </Empty>
@@ -212,7 +214,7 @@ export default function InventoryClient() {
       <InventoryCatalogPicker
         open={pickerOpen}
         onCancel={() => setPickerOpen(false)}
-        onSelect={pickFromCatalog}
+        onSelect={pickFromOrder}
       />
     </div>
   );

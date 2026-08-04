@@ -16,6 +16,7 @@ import { useCart } from "@/lib/cart";
 import { useFavorites } from "@/lib/favorites";
 import { useInventory } from "@/lib/inventory";
 import { getInventoryStatus } from "@/lib/inventory-core";
+import { useOrders } from "@/lib/orders";
 import { formatPrice } from "@/components/item/formatPrice";
 import StatCard from "@/components/ui/StatCard";
 import ItemCard from "@/components/ui/ItemCard";
@@ -49,6 +50,7 @@ export default function DashboardClient() {
   const cart = useCart();
   const favorites = useFavorites();
   const inventory = useInventory();
+  const orders = useOrders();
 
   const favoriteItems = useMemo(
     () =>
@@ -218,18 +220,29 @@ export default function DashboardClient() {
             className="rounded-2xl bg-paper p-5 shadow-soft ring-1 ring-gray-200/50"
           >
             <div className="flex items-center gap-3">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-500">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-green-100 text-green-700">
                 <UnorderedListOutlined />
               </span>
-              <div>
+              <div className="min-w-0 flex-1">
                 <h2 className="text-base font-semibold text-gray-900">
                   Orders
                 </h2>
                 <p className="mt-0.5 text-sm text-gray-500">
-                  Checkout is coming soon.
+                  {orders.orders.length === 0
+                    ? "No orders yet. Place one from your cart."
+                    : `${orders.pendingCount} pending \u00b7 ${orders.receivedCount} received`}
                 </p>
               </div>
             </div>
+            {orders.orders.length > 0 && (
+              <Link
+                href="/buyer/orders"
+                className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-green-700 transition-colors hover:text-green-800"
+              >
+                View orders
+                <ArrowRightOutlined className="text-xs" />
+              </Link>
+            )}
           </section>
         </div>
       </div>

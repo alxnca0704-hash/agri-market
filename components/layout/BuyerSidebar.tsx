@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   DashboardOutlined,
   InboxOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 
 interface BuyerSidebarProps {
@@ -31,6 +32,11 @@ export default function BuyerSidebar({ onNavigate }: BuyerSidebarProps) {
       key: "/buyer/inventory",
       icon: <InboxOutlined />,
       label: <Link href="/buyer/inventory">Inventory</Link>,
+    },
+    {
+      key: "/buyer/orders",
+      icon: <UnorderedListOutlined />,
+      label: <Link href="/buyer/orders">Orders</Link>,
     },
   ];
 

@@ -3,13 +3,32 @@ import { App, Button, Empty, InputNumber } from "antd";
 import { DeleteOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getItemOptionLabel } from "@/lib/catalog";
 import { useCart } from "@/lib/cart";
+import { useOrders } from "@/lib/orders";
 import { formatPrice } from "@/components/item/formatPrice";
 
 export default function CartPage() {
+  const router = useRouter();
   const { lineItems, total, updateQuantity, removeItem, clear } = useCart();
-  const { message } = App.useApp();
+  const { placeOrder } = useOrders();
+  const { message, modal } = App.useApp();
+
+  const handleCheckout = () => {
+    modal.confirm({
+      title: "Place this order?",
+      content: `Order ${lineItems.length} line item${lineItems.length === 1 ? "" : "s"} totaling ${formatPrice(total)}. Your cart will be cleared after placing it.`,
+      okText: "Place order",
+      cancelText: "Keep shopping",
+      onOk: () => {
+        placeOrder(lineItems);
+        clear();
+        message.success("Order placed");
+        router.push("/buyer/orders");
+      },
+    });
+  };
 
   if (lineItems.length === 0) {
     return (
@@ -145,12 +164,12 @@ export default function CartPage() {
               size="large"
               block
               className="mt-5"
-              onClick={() => message.info("Checkout is coming soon")}
+              onClick={handleCheckout}
             >
               Proceed to Checkout
             </Button>
             <p className="mt-3 text-center text-xs text-gray-400">
-              Checkout coming soon
+              Place the order and track it in My Orders
             </p>
           </div>
         </div>

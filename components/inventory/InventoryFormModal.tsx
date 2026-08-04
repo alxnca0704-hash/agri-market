@@ -18,6 +18,7 @@ export interface InventoryPrefill {
   category?: string;
   unit?: string;
   image?: string;
+  quantity?: number;
 }
 
 interface InventoryFormModalProps {
@@ -57,7 +58,7 @@ export default function InventoryFormModal({
       form.setFieldsValue({
         name: prefill.name,
         category: prefill.category,
-        quantity: 1,
+        quantity: prefill.quantity ?? 1,
         unit: prefill.unit,
         lowStockThreshold: 0,
         notes: "",
