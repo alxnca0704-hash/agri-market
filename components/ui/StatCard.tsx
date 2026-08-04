@@ -9,9 +9,9 @@ interface StatCardProps {
 }
 
 const ACCENT_CLASSES = {
-  green: "bg-green-50 text-green-700",
-  amber: "bg-amber-50 text-amber-700",
-  red: "bg-red-50 text-red-600",
+  green: "bg-green-600",
+  amber: "bg-amber-500",
+  red: "bg-red-500",
 } as const;
 
 export default function StatCard({
@@ -21,23 +21,28 @@ export default function StatCard({
   accent = "green",
   href,
 }: StatCardProps) {
-  const dot = <span aria-hidden className={`h-2.5 w-2.5 rounded-full ${ACCENT_CLASSES[accent]}`} />;
+  const dot = (
+    <span
+      aria-hidden
+      className={`h-2 w-2 shrink-0 rounded-full ${ACCENT_CLASSES[accent]}`}
+    />
+  );
 
   const content = (
-    <div className="rounded-2xl border border-gray-200 bg-white p-5 transition-[border-color,box-shadow] duration-300 hover:border-gray-300 hover:shadow-lg hover:shadow-gray-900/[0.06]">
+    <div className="group rounded-2xl bg-paper p-5 shadow-soft ring-1 ring-gray-200/50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift">
       <div className="flex items-center gap-2">
         {dot}
         <p className="text-sm font-medium text-gray-500">{label}</p>
       </div>
-      <p className="mt-3 text-3xl font-bold tabular-nums tracking-tight text-gray-900">
+      <p className="mt-3 font-mono text-3xl font-semibold tabular-nums tracking-tight text-gray-900">
         {value}
       </p>
-      {hint && <p className="mt-1 text-xs text-gray-400">{hint}</p>}
+      {hint && <p className="mt-1.5 text-xs text-gray-400">{hint}</p>}
     </div>
   );
 
   return href ? (
-    <Link href={href} className="block">
+    <Link href={href} className="block focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-green-600">
       {content}
     </Link>
   ) : (

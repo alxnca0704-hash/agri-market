@@ -21,16 +21,18 @@ export default function FavoritesPage() {
   if (items.length === 0) {
     return (
       <div className="mx-auto max-w-5xl">
-        <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900 text-balance">
+        <h1 className="mb-6 text-3xl font-semibold tracking-tight text-gray-900 text-balance">
           Favorites
         </h1>
-        <Empty description="You haven't saved any items yet">
-          <Link href="/buyer/marketplace">
-            <Button type="primary" icon={<HeartOutlined />}>
-              Browse items
-            </Button>
-          </Link>
-        </Empty>
+        <div className="rounded-3xl border border-dashed border-gray-300 bg-paper py-20 shadow-soft">
+          <Empty description="You haven't saved any items yet">
+            <Link href="/buyer/marketplace">
+              <Button type="primary" icon={<HeartOutlined />}>
+                Browse items
+              </Button>
+            </Link>
+          </Empty>
+        </div>
       </div>
     );
   }
@@ -38,10 +40,10 @@ export default function FavoritesPage() {
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-balance">
+        <h1 className="text-3xl font-semibold tracking-tight text-gray-900 text-balance">
           Favorites
         </h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="mt-1 font-mono text-sm tabular-nums text-gray-500">
           {items.length} saved item{items.length === 1 ? "" : "s"}
         </p>
       </div>

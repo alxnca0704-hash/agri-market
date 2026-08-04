@@ -99,7 +99,7 @@ export default function InventoryClient() {
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-balance">
+          <h1 className="text-3xl font-semibold tracking-tight text-gray-900 text-balance">
             Inventory
           </h1>
           <p className="mt-1 text-sm text-gray-500">
@@ -162,7 +162,7 @@ export default function InventoryClient() {
       )}
 
       {!hasItems ? (
-        <div className="rounded-2xl border border-dashed border-gray-300 bg-white py-20">
+        <div className="rounded-3xl border border-dashed border-gray-300 bg-paper py-20 shadow-soft">
           <Empty
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             description="Your farm inventory is empty"
@@ -192,7 +192,7 @@ export default function InventoryClient() {
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           description={`No items match your ${search ? `search for "${search}"` : "filters"}`}
-          className="rounded-2xl border border-dashed border-gray-300 bg-white py-20"
+          className="rounded-3xl border border-dashed border-gray-300 bg-paper py-20 shadow-soft"
         />
       ) : (
         <InventoryTable items={filtered} onEdit={openEditForm} />

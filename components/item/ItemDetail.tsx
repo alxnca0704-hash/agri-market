@@ -121,7 +121,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
               {category && (
                 <p className="text-sm font-medium text-green-700">{category}</p>
               )}
-              <h1 className="mt-1 text-2xl font-bold leading-tight tracking-tight text-gray-900 text-balance sm:text-3xl md:text-4xl">
+              <h1 className="mt-1 text-2xl font-semibold leading-tight tracking-tight text-gray-900 text-balance sm:text-3xl md:text-4xl">
                 {name}
               </h1>
             </div>
@@ -151,7 +151,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
             {description}
           </p>
 
-          <dl className="grid grid-cols-1 gap-5 rounded-2xl bg-gray-50 p-5 sm:grid-cols-2">
+          <dl className="grid grid-cols-1 gap-5 rounded-2xl bg-gray-100/70 p-5 sm:grid-cols-2">
             {seller && (
               <div>
                 <dt className="text-xs font-medium text-gray-400">Seller</dt>
@@ -227,7 +227,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
             <div className="flex flex-col gap-4 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
               <div>
                 <p className="text-sm text-gray-400">Total</p>
-                <p className="text-3xl font-bold tabular-nums text-gray-900">
+                <p className="mt-0.5 font-mono text-3xl font-semibold tabular-nums text-gray-900">
                   {formatPrice(lineTotal)}
                 </p>
                 <p className="mt-1 text-sm text-gray-400">{unit}</p>
@@ -266,7 +266,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
             Reviews
           </h2>
           {reviewCount > 0 && (
-            <span className="rounded-full bg-green-50 px-2.5 py-0.5 text-sm font-medium text-green-700">
+            <span className="rounded-md bg-green-100 px-2.5 py-0.5 font-mono text-sm font-semibold tabular-nums text-green-800">
               {reviewCount}
             </span>
           )}
@@ -275,7 +275,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
         {reviewCount > 0 ? (
           <div className="mt-6 grid gap-8 lg:grid-cols-[260px_1fr]">
             <div>
-              <p className="text-5xl font-bold tabular-nums text-gray-900">
+              <p className="font-mono text-5xl font-semibold tabular-nums text-gray-900">
                 {averageRating?.toFixed(1)}
               </p>
               <Rate
@@ -290,7 +290,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
                     <span className="w-3 tabular-nums">{row.star}</span>
                     <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
                       <div
-                        className="h-full rounded-full bg-amber-400"
+                        className="h-full rounded-full bg-green-600"
                         style={{ width: `${row.pct}%` }}
                       />
                     </div>
@@ -306,6 +306,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
                   <Avatar
                     src={review.avatar}
                     icon={<UserOutlined />}
+                    shape="square"
                     className="bg-green-600"
                   />
                   <div className="flex-1">
@@ -336,7 +337,7 @@ export default function ItemDetail({ item }: ItemDetailProps) {
           </p>
         )}
 
-        <div className="mt-8 rounded-2xl border border-gray-100 bg-gray-50/60 p-5">
+        <div className="mt-8 rounded-2xl bg-gray-100/70 p-5 ring-1 ring-gray-200/50">
           <h3 className="text-sm font-semibold text-gray-900">Leave a review</h3>
           <div className="mt-3 flex items-center gap-2">
             <span className="text-sm text-gray-500">Your rating</span>

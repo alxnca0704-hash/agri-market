@@ -3,10 +3,12 @@ import { Empty } from "antd";
 export default function ProfilePage() {
   return (
     <div className="mx-auto max-w-5xl">
-      <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900 text-balance">
+      <h1 className="mb-6 text-3xl font-semibold tracking-tight text-gray-900 text-balance">
         Profile
       </h1>
-      <Empty description="Account settings coming soon" />
+      <div className="rounded-3xl border border-dashed border-gray-300 bg-paper py-20 shadow-soft">
+        <Empty description="Account settings coming soon" />
+      </div>
     </div>
   );
 }

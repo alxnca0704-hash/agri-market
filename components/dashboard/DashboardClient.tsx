@@ -7,6 +7,7 @@ import {
   InboxOutlined,
   ShoppingCartOutlined,
   ShopOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
 import Link from "next/link";
@@ -63,14 +64,36 @@ export default function DashboardClient() {
 
   return (
     <div className="mx-auto max-w-5xl">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-balance">
-          Welcome back, Juan Cruz
-        </h1>
-        <p className="mt-1 text-sm text-gray-500">
-          Here&apos;s what&apos;s happening on your farm today.
-        </p>
-      </div>
+      <section
+        aria-label="Welcome"
+        className="relative mb-8 overflow-hidden rounded-3xl bg-paper shadow-soft ring-1 ring-gray-200/50"
+      >
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-br from-green-100/80 via-paper to-paper"
+        />
+        <div aria-hidden className="absolute inset-y-0 right-0 w-full max-w-xl">
+          <Image
+            src="https://picsum.photos/seed/agri-rice-field/1200/480"
+            alt=""
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 40vw"
+            className="object-cover opacity-[0.07]"
+          />
+        </div>
+        <div className="relative px-6 py-8 sm:px-8 sm:py-10">
+          <p className="text-sm font-medium text-green-800">
+            Central Luzon &middot; Wet season
+          </p>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-gray-900 text-balance sm:text-4xl">
+            Welcome back, Juan
+          </h1>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-gray-600">
+            Here&apos;s what&apos;s happening on your farm today.
+          </p>
+        </div>
+      </section>
 
       <div className="mb-8 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
         <StatCard
@@ -97,7 +120,7 @@ export default function DashboardClient() {
       <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <section
           aria-label="Low stock alerts"
-          className="rounded-2xl border border-gray-200 bg-white p-5 lg:col-span-2"
+          className="rounded-2xl bg-paper p-5 shadow-soft ring-1 ring-gray-200/50 lg:col-span-2"
         >
           <div className="mb-4 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
@@ -105,7 +128,7 @@ export default function DashboardClient() {
                 Low stock alerts
               </h2>
               {lowStockItems.length > 0 && (
-                <span className="rounded-full bg-amber-50 px-2 py-0.5 text-xs font-semibold tabular-nums text-amber-700">
+                <span className="rounded-md bg-amber-100 px-2 py-0.5 font-mono text-xs font-semibold tabular-nums text-amber-800">
                   {lowStockItems.length}
                 </span>
               )}
@@ -119,7 +142,7 @@ export default function DashboardClient() {
           </div>
 
           {lowStockItems.length === 0 ? (
-            <div className="flex flex-col items-start gap-3 rounded-xl bg-green-50/60 p-4">
+            <div className="flex flex-col items-start gap-3 rounded-xl bg-green-50/70 p-4">
               <p className="flex items-center gap-2 text-sm font-medium text-green-700">
                 <CheckCircleOutlined />
                 Everything&apos;s stocked up
@@ -150,7 +173,7 @@ export default function DashboardClient() {
                       {item.category ?? "No category"}
                     </p>
                   </div>
-                  <p className="shrink-0 text-sm tabular-nums text-gray-500">
+                  <p className="shrink-0 font-mono text-sm tabular-nums text-gray-500">
                     {item.quantity} {item.unit ?? "unit"} on hand
                     {item.lowStockThreshold > 0 && (
                       <span className="text-gray-400">
@@ -172,9 +195,9 @@ export default function DashboardClient() {
               <Link
                 key={action.href}
                 href={action.href}
-                className="group flex items-center gap-4 rounded-2xl border border-gray-200 bg-white p-4 transition-[border-color,box-shadow] duration-300 hover:border-gray-300 hover:shadow-lg hover:shadow-gray-900/[0.06]"
+                className="group flex items-center gap-4 rounded-2xl bg-paper p-4 shadow-soft ring-1 ring-gray-200/50 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-lift"
               >
-                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-green-50 text-lg text-green-700">
+                <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-green-100 text-lg text-green-700 transition-colors duration-300 group-hover:bg-green-700 group-hover:text-white">
                   {action.icon}
                 </span>
                 <span className="min-w-0 flex-1">
@@ -192,12 +215,21 @@ export default function DashboardClient() {
 
           <section
             aria-label="Orders"
-            className="rounded-2xl border border-dashed border-gray-300 bg-white p-5"
+            className="rounded-2xl bg-paper p-5 shadow-soft ring-1 ring-gray-200/50"
           >
-            <h2 className="text-lg font-semibold text-gray-900">Orders</h2>
-            <p className="mt-1 text-sm text-gray-500">
-              You have no orders yet. Checkout is coming soon.
-            </p>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gray-100 text-gray-500">
+                <UnorderedListOutlined />
+              </span>
+              <div>
+                <h2 className="text-base font-semibold text-gray-900">
+                  Orders
+                </h2>
+                <p className="mt-0.5 text-sm text-gray-500">
+                  Checkout is coming soon.
+                </p>
+              </div>
+            </div>
           </section>
         </div>
       </div>
@@ -230,7 +262,7 @@ export default function DashboardClient() {
       {inventory.count === 0 && (
         <section
           aria-label="Getting started"
-          className="rounded-2xl border border-gray-200 bg-white p-6"
+          className="rounded-2xl bg-paper p-6 shadow-soft ring-1 ring-gray-200/50"
         >
           <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
             <div>

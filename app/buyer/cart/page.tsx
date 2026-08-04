@@ -14,16 +14,18 @@ export default function CartPage() {
   if (lineItems.length === 0) {
     return (
       <div className="mx-auto max-w-5xl">
-        <h1 className="mb-6 text-3xl font-bold tracking-tight text-gray-900 text-balance">
+        <h1 className="mb-6 text-3xl font-semibold tracking-tight text-gray-900 text-balance">
           Cart
         </h1>
-        <Empty description="Your cart is empty">
-          <Link href="/buyer/marketplace">
-            <Button type="primary" icon={<ShoppingCartOutlined />}>
-              Browse items
-            </Button>
-          </Link>
-        </Empty>
+        <div className="rounded-3xl border border-dashed border-gray-300 bg-paper py-20 shadow-soft">
+          <Empty description="Your cart is empty">
+            <Link href="/buyer/marketplace">
+              <Button type="primary" icon={<ShoppingCartOutlined />}>
+                Browse items
+              </Button>
+            </Link>
+          </Empty>
+        </div>
       </div>
     );
   }
@@ -31,7 +33,7 @@ export default function CartPage() {
   return (
     <div className="mx-auto max-w-5xl">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-balance">
+        <h1 className="text-3xl font-semibold tracking-tight text-gray-900 text-balance">
           Cart
         </h1>
         <Button
@@ -51,7 +53,7 @@ export default function CartPage() {
           {lineItems.map((line) => (
             <div
               key={line.key}
-              className="flex gap-4 rounded-2xl border border-gray-200 bg-white p-4"
+              className="flex gap-4 rounded-2xl bg-paper p-4 shadow-soft ring-1 ring-gray-200/50"
             >
               <Link
                 href={`/buyer/marketplace/${line.item.id}`}
@@ -110,7 +112,7 @@ export default function CartPage() {
                       {formatPrice(line.unitPrice)} each
                     </span>
                   </div>
-                  <p className="text-lg font-bold tabular-nums text-gray-900">
+                  <p className="font-mono text-lg font-semibold tabular-nums text-gray-900">
                     {formatPrice(line.unitPrice * line.quantity)}
                   </p>
                 </div>
@@ -120,20 +122,20 @@ export default function CartPage() {
         </div>
 
         <div className="lg:w-80">
-          <div className="rounded-2xl border border-gray-200 bg-white p-6">
+          <div className="rounded-2xl bg-paper p-6 shadow-soft ring-1 ring-gray-200/50 lg:sticky lg:top-[88px]">
             <h2 className="text-lg font-semibold text-gray-900">
               Order summary
             </h2>
             <dl className="mt-4 space-y-2 text-sm">
               <div className="flex justify-between">
                 <dt className="text-gray-500">Items</dt>
-                <dd className="font-medium text-gray-900">
+                <dd className="font-mono font-medium tabular-nums text-gray-900">
                   {lineItems.length}
                 </dd>
               </div>
               <div className="flex justify-between border-t border-gray-100 pt-3">
                 <dt className="font-semibold text-gray-900">Total</dt>
-                <dd className="text-lg font-bold tabular-nums text-gray-900">
+                <dd className="font-mono text-lg font-semibold tabular-nums text-gray-900">
                   {formatPrice(total)}
                 </dd>
               </div>

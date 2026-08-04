@@ -22,7 +22,7 @@ export default function FavoriteButton({
       aria-label={favorited ? "Remove from favorites" : "Save to favorites"}
       title={favorited ? "Remove from favorites" : "Save to favorites"}
       className={[
-        "flex h-8 w-8 shrink-0 items-center justify-center rounded-full transition-all duration-200 hover:scale-105 active:scale-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600",
+        "flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-paper shadow-soft ring-1 ring-gray-200/70 transition-all duration-200 hover:scale-105 hover:ring-green-300 active:scale-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600",
         className,
       ]
         .filter(Boolean)

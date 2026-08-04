@@ -1,7 +1,7 @@
 "use client";
 import { useMemo } from "react";
-import { Empty, Select } from "antd";
-import { DownOutlined } from "@ant-design/icons";
+import { Button, Select } from "antd";
+import { DownOutlined, SearchOutlined } from "@ant-design/icons";
 import { useRouter, useSearchParams } from "next/navigation";
 import ItemCard from "@/components/ui/ItemCard";
 import MarketplaceFilterPanel from "./MarketplaceFilterPanel";
@@ -97,7 +97,7 @@ export default function MarketplaceGrid() {
       <div className="mb-6 flex flex-col gap-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight text-gray-900 text-balance">
+            <h1 className="text-3xl font-semibold tracking-tight text-gray-900 text-balance">
               Marketplace
             </h1>
             {q && (
@@ -107,7 +107,7 @@ export default function MarketplaceGrid() {
             )}
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500">
+            <span className="font-mono text-sm tabular-nums text-gray-500">
               {filteredItems.length} item
               {filteredItems.length === 1 ? "" : "s"}
             </span>
@@ -148,14 +148,22 @@ export default function MarketplaceGrid() {
               ))}
             </div>
           ) : (
-            <Empty
-              description={
-                q
-                  ? `No items match your search for "${q}"`
-                  : "No items match your filters"
-              }
-              className="py-20"
-            />
+            <div className="flex flex-col items-center gap-5 rounded-3xl bg-paper px-6 py-20 text-center shadow-soft ring-1 ring-gray-200/50">
+              <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-green-100 text-2xl text-green-700">
+                <SearchOutlined />
+              </span>
+              <div>
+                <p className="text-lg font-semibold text-gray-900">
+                  {q ? `No results for "${q}"` : "No items match your filters"}
+                </p>
+                <p className="mx-auto mt-1 max-w-sm text-sm text-gray-500">
+                  {q
+                    ? "Try a different search term, or clear your filters and browse the full catalog."
+                    : "Try widening your price range or choosing a different area."}
+                </p>
+              </div>
+              <Button onClick={clearFilters}>Clear filters</Button>
+            </div>
           )}
         </div>
       </div>

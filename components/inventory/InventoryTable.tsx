@@ -43,7 +43,7 @@ export default function InventoryTable({
         return (
           <div
             key={item.id}
-            className="flex flex-col gap-4 rounded-2xl border border-gray-200 bg-white p-4 sm:flex-row sm:items-center"
+            className="flex flex-col gap-4 rounded-2xl bg-paper p-4 shadow-soft ring-1 ring-gray-200/50 transition-shadow duration-200 hover:shadow-lift sm:flex-row sm:items-center"
           >
             <div className="flex min-w-0 flex-1 items-center gap-4">
               <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-gray-100">

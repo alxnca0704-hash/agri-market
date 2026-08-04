@@ -5,6 +5,7 @@ import Link from "next/link";
 import type { Item } from "@/lib/catalog";
 import { formatPrice } from "@/components/item/formatPrice";
 import FavoriteButton from "@/components/item/FavoriteButton";
+import StatusBadge from "@/components/item/StatusBadge";
 
 interface ItemCardProps {
   item: Item;
@@ -29,7 +30,7 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
   const isOutOfStock = status === "out-of-stock";
 
   const cardClasses = [
-    "group relative flex flex-col overflow-hidden rounded-2xl border border-gray-200/60 bg-white transition-[border-color,box-shadow] duration-300 hover:border-gray-300 hover:shadow-lg hover:shadow-gray-900/[0.06] focus-within:ring-2 focus-within:ring-green-600/50 focus-within:ring-offset-2",
+    "group relative flex flex-col overflow-hidden rounded-2xl bg-paper shadow-soft ring-1 ring-gray-200/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-lift focus-within:ring-2 focus-within:ring-green-600/60",
     className,
   ]
     .filter(Boolean)
@@ -50,6 +51,11 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
             .filter(Boolean)
             .join(" ")}
         />
+        {status !== "available" && (
+          <div className="absolute left-2.5 top-2.5 z-10">
+            <StatusBadge status={status} />
+          </div>
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-3 sm:gap-2.5 sm:p-4">
@@ -85,9 +91,9 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
   );
 
   const footer = (
-    <footer className="flex items-end justify-between gap-3 border-t border-gray-100 p-3 pt-2.5 sm:p-4 sm:pt-3">
+    <footer className="flex items-end justify-between gap-3 p-3 pt-1 sm:p-4 sm:pt-1">
       <div className="min-w-0">
-        <p className="text-base font-bold tabular-nums tracking-tight text-gray-900 sm:text-lg">
+        <p className="font-mono text-base font-semibold tabular-nums tracking-tight text-gray-900 sm:text-lg">
           {hasOptions && (
             <span className="text-xs font-medium text-gray-500 sm:text-sm">
               from{" "}
@@ -121,7 +127,7 @@ export default function ItemCard({ item, href, className }: ItemCardProps) {
 
       <FavoriteButton
         itemId={item.id}
-        className="absolute right-2.5 top-2.5 z-10 border border-gray-200/70 bg-white shadow-sm shadow-gray-900/5 sm:right-3 sm:top-3"
+        className="absolute right-2.5 top-2.5 z-10 bg-paper/90 ring-1 ring-gray-200/70 backdrop-blur-sm sm:right-3 sm:top-3"
       />
     </article>
   );

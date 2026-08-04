@@ -40,13 +40,28 @@ const userMenuItems: MenuProps["items"] = [
   },
 ];
 
+function BrandMark() {
+  return (
+    <svg viewBox="0 0 64 64" className="h-4.5 w-4.5" aria-hidden>
+      <path
+        d="M32 50v-16"
+        stroke="#fbfaf8"
+        strokeWidth="5"
+        strokeLinecap="round"
+      />
+      <path d="M32 34c0-8-6-13-14-13 0 8 6 13 14 13z" fill="#fbfaf8" />
+      <path d="M32 34c0-8 6-13 14-13 0 8-6 13-14 13z" fill="#fbfaf8" />
+    </svg>
+  );
+}
+
 export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
   const router = useRouter();
   const { count: cartCount } = useCart();
   const { count: favoriteCount } = useFavorites();
 
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center gap-3 border-b border-gray-100 bg-white px-4 shadow-sm">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-3 border-b border-gray-200/70 bg-paper/85 px-4 backdrop-blur-md sm:px-6">
       <div className="md:hidden">
         <Button
           type="text"
@@ -56,9 +71,12 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
         />
       </div>
 
-      <Link href="/buyer/marketplace" className="flex items-center gap-2">
-        <span className="hidden text-2xl font-bold tracking-tight text-gray-900 sm:block">
-          Agri<span className="text-green-600">Market</span>
+      <Link href="/buyer/marketplace" className="flex items-center gap-2.5">
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-green-600 shadow-soft transition-transform duration-200 hover:scale-105">
+          <BrandMark />
+        </span>
+        <span className="hidden text-lg font-semibold tracking-tight text-gray-900 sm:block">
+          AgriMarket
         </span>
       </Link>
 
@@ -66,7 +84,7 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
         <Input
           prefix={<SearchOutlined className="text-gray-400" />}
           placeholder="Search products..."
-          className="max-w-xs rounded-full lg:max-w-sm"
+          className="w-56 lg:w-72"
           onPressEnter={(e) => {
             const term = e.currentTarget.value.trim();
             router.push(
@@ -78,14 +96,15 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
         />
       </div>
 
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex items-center gap-1.5">
         <Badge count={favoriteCount} size="small">
           <Link href="/buyer/favorites">
             <Button
               type="text"
               shape="circle"
-              icon={<HeartOutlined style={{ fontSize: 20 }} />}
+              icon={<HeartOutlined style={{ fontSize: 19 }} />}
               aria-label="Favorites"
+              className="text-gray-600"
             />
           </Link>
         </Badge>
@@ -94,17 +113,18 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             <Button
               type="text"
               shape="circle"
-              icon={<ShoppingCartOutlined style={{ fontSize: 20 }} />}
+              icon={<ShoppingCartOutlined style={{ fontSize: 19 }} />}
               aria-label="Cart"
+              className="text-gray-600"
             />
           </Link>
         </Badge>
         <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
           <button
             type="button"
-            className="ml-1 flex cursor-pointer items-center gap-2 rounded-full p-1 transition-colors hover:bg-gray-50"
+            className="ml-1 flex cursor-pointer items-center gap-2.5 rounded-full p-1 pr-2 transition-colors hover:bg-gray-100/80"
           >
-            <Avatar size={48} className="bg-green-600" icon={<UserOutlined />} />
+            <Avatar size={38} className="bg-green-600" icon={<UserOutlined />} />
             <span className="hidden text-left lg:block">
               <span className="block text-sm font-medium leading-tight text-gray-900">
                 Juan Cruz

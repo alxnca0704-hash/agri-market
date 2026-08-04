@@ -1,17 +1,23 @@
 import type { InventoryStatus } from "@/lib/inventory-core";
 
-const STATUS_CONFIG: Record<InventoryStatus, { label: string; badgeClass: string }> = {
+const STATUS_CONFIG: Record<
+  InventoryStatus,
+  { label: string; dotClass: string; badgeClass: string }
+> = {
   ok: {
     label: "In stock",
-    badgeClass: "border-green-200 bg-green-50 text-green-700",
+    dotClass: "bg-green-600",
+    badgeClass: "bg-green-100 text-green-800",
   },
   low: {
     label: "Low stock",
-    badgeClass: "border-amber-200 bg-amber-50 text-amber-700",
+    dotClass: "bg-amber-500",
+    badgeClass: "bg-amber-100 text-amber-800",
   },
   out: {
     label: "Out of stock",
-    badgeClass: "border-red-200 bg-red-50 text-red-600",
+    dotClass: "bg-red-500",
+    badgeClass: "bg-red-100 text-red-700",
   },
 };
 
@@ -23,8 +29,12 @@ export default function InventoryStatusBadge({
   const config = STATUS_CONFIG[status];
   return (
     <span
-      className={`shrink-0 rounded-lg px-2 py-1 text-xs font-medium ${config.badgeClass}`}
+      className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium ${config.badgeClass}`}
     >
+      <span
+        aria-hidden
+        className={`h-1.5 w-1.5 rounded-full ${config.dotClass}`}
+      />
       {config.label}
     </span>
   );

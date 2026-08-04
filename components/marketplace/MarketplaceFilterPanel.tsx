@@ -20,11 +20,7 @@ interface MarketplaceFilterPanelProps {
 }
 
 function SectionTitle({ children }: { children: React.ReactNode }) {
-  return (
-    <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
-      {children}
-    </p>
-  );
+  return <p className="mb-2 text-xs font-semibold text-gray-500">{children}</p>;
 }
 
 export default function MarketplaceFilterPanel({
@@ -135,7 +131,7 @@ export default function MarketplaceFilterPanel({
 
       <aside
         aria-label="Item filters"
-        className="hidden h-fit shrink-0 rounded-2xl border border-gray-200 bg-white p-5 lg:sticky lg:top-[88px] lg:block lg:w-64"
+        className="hidden h-fit shrink-0 rounded-2xl bg-paper p-5 shadow-soft ring-1 ring-gray-200/50 lg:sticky lg:top-[88px] lg:block lg:w-64"
       >
         <div className="mb-4 flex items-center justify-between">
           <p className="flex items-center gap-2 text-sm font-semibold text-gray-900">
@@ -160,8 +156,8 @@ export default function MarketplaceFilterPanel({
                   onClick={() => onCategoryChange(cat)}
                   className={
                     cat === category
-                      ? "rounded-lg bg-green-600 px-3 py-1.5 text-left text-sm font-medium text-white transition-colors"
-                      : "rounded-lg px-3 py-1.5 text-left text-sm text-gray-600 transition-colors hover:bg-gray-50 hover:text-green-700"
+                      ? "rounded-lg bg-green-600 px-3 py-1.5 text-left text-sm font-medium text-white transition-colors active:scale-[0.98]"
+                      : "rounded-lg px-3 py-1.5 text-left text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-green-700"
                   }
                 >
                   {cat}

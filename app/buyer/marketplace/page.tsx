@@ -3,13 +3,13 @@ import MarketplaceGrid from "@/components/marketplace/MarketplaceGrid";
 
 function SkeletonCard() {
   return (
-    <div className="overflow-hidden rounded-2xl border border-gray-200/60 bg-white">
+    <div className="overflow-hidden rounded-2xl bg-paper shadow-soft ring-1 ring-gray-200/50">
       <div className="aspect-[4/3] animate-pulse bg-gray-100 motion-reduce:animate-none" />
       <div className="space-y-2 p-3 sm:p-4">
         <div className="h-4 w-3/4 animate-pulse rounded-md bg-gray-100 motion-reduce:animate-none" />
         <div className="h-3 w-1/2 animate-pulse rounded-md bg-gray-100 motion-reduce:animate-none" />
       </div>
-      <div className="flex items-center justify-between border-t border-gray-100 p-3 sm:p-4">
+      <div className="flex items-center justify-between p-3 sm:p-4">
         <div className="h-4 w-1/3 animate-pulse rounded-md bg-gray-100 motion-reduce:animate-none" />
         <div className="h-3 w-1/6 animate-pulse rounded-md bg-gray-100 motion-reduce:animate-none" />
       </div>

@@ -1,26 +1,115 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Warm stone neutrals — replaces the default cool gray scale. */
+  --color-gray-50: #f9f8f6;
+  --color-gray-100: #f2f0ed;
+  --color-gray-200: #e7e4df;
+  --color-gray-300: #d6d2cc;
+  --color-gray-400: #afa9a0;
+  --color-gray-500: #8b857c;
+  --color-gray-600: #6e6860;
+  --color-gray-700: #56504a;
+  --color-gray-800: #3e3a36;
+  --color-gray-900: #262320;
+  --color-gray-950: #171412;
+
+  /* Deep, desaturated forest green — the single accent. */
+  --color-green-50: #f2f6f2;
+  --color-green-100: #e3ebe4;
+  --color-green-200: #c7d7ca;
+  --color-green-300: #a0bca6;
+  --color-green-400: #74a07e;
+  --color-green-500: #54805d;
+  --color-green-600: #3e6b4d;
+  --color-green-700: #335740;
+  --color-green-800: #2b4635;
+  --color-green-900: #243a2d;
+  --color-green-950: #14241a;
+
+  /* Muted clay for low-stock / warnings. */
+  --color-amber-50: #fbf7ee;
+  --color-amber-100: #f4ebd7;
+  --color-amber-200: #e7d5ae;
+  --color-amber-300: #d8ba7c;
+  --color-amber-400: #c79c4f;
+  --color-amber-500: #b07f33;
+  --color-amber-600: #8f6524;
+  --color-amber-700: #70501f;
+  --color-amber-800: #56401b;
+  --color-amber-900: #443316;
+
+  /* Muted brick for out-of-stock / errors. */
+  --color-red-50: #fbf3f1;
+  --color-red-100: #f5e2de;
+  --color-red-200: #e9c4bd;
+  --color-red-300: #d99c91;
+  --color-red-400: #c9705f;
+  --color-red-500: #b3523e;
+  --color-red-600: #963e2c;
+  --color-red-700: #7a3124;
+  --color-red-800: #5f2920;
+  --color-red-900: #4b231c;
+
+  /* Semantic surfaces. */
+  --color-paper: #fbfaf8;
+  --color-mist: #f3f1ed;
+  --color-ink: #262320;
+
+  /* Tinted shadows — no pure-black drop shadows. */
+  --shadow-soft: 0 1px 2px rgba(38, 35, 32, 0.05), 0 10px 24px -16px rgba(38, 35, 32, 0.16);
+  --shadow-lift: 0 2px 4px rgba(38, 35, 32, 0.05), 0 20px 40px -20px rgba(62, 107, 77, 0.22);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-background: var(--color-mist);
+  --color-foreground: var(--color-ink);
+  --font-sans: var(--font-outfit);
+  --font-mono: var(--font-spline);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  background: var(--color-mist);
+  color: var(--color-ink);
+  font-family: var(--font-outfit), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--color-green-200);
+  color: var(--color-green-900);
+}
+
+:focus-visible {
+  outline-color: var(--color-green-600);
+}
+
+/* Subtle grain overlay to break digital flatness. */
+@media (prefers-reduced-motion: no-preference) {
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    opacity: 0.028;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

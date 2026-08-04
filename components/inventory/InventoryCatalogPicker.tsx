@@ -49,7 +49,7 @@ export default function InventoryCatalogPicker({
             <button
               type="button"
               onClick={() => onSelect(item)}
-              className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-green-50"
+              className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-green-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-green-600"
             >
               <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg bg-gray-100">
                 <Image
@@ -69,7 +69,7 @@ export default function InventoryCatalogPicker({
                     "Farm supplies"}
                 </p>
               </div>
-              <span className="shrink-0 text-sm font-semibold tabular-nums text-gray-900">
+              <span className="shrink-0 font-mono text-sm font-semibold tabular-nums text-gray-900">
                 {formatPrice(item.price)}
               </span>
             </button>
