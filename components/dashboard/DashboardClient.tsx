@@ -11,8 +11,8 @@ import {
 } from "@ant-design/icons";
 import Image from "next/image";
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 import { getItem } from "@/lib/catalog";
-import { useAuth } from "@/lib/auth";
 import { useCart } from "@/lib/cart";
 import { useFavorites } from "@/lib/favorites";
 import { useInventory } from "@/lib/inventory";
@@ -52,7 +52,7 @@ export default function DashboardClient() {
   const favorites = useFavorites();
   const inventory = useInventory();
   const orders = useOrders();
-  const { user } = useAuth();
+  const { user } = useUser();
 
   const favoriteItems = useMemo(
     () =>
@@ -91,7 +91,7 @@ export default function DashboardClient() {
             Central Luzon &middot; Wet season
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-gray-900 text-balance sm:text-4xl">
-            Welcome back, {user?.name ?? "farmer"}
+            Welcome back, {user?.fullName ?? "farmer"}
           </h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-gray-600">
             Here&apos;s what&apos;s happening on your farm today.

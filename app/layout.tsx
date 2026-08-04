@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
+import { ClerkProvider } from "@clerk/nextjs";
 import { App, ConfigProvider } from "antd";
 import { Outfit, Spline_Sans_Mono } from "next/font/google";
-import { AuthProvider } from "@/lib/auth";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -50,7 +50,7 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <AuthProvider>
+        <ClerkProvider>
           <ConfigProvider
             theme={{
               token: {
@@ -103,7 +103,7 @@ export default function RootLayout({
           >
             <App>{children}</App>
           </ConfigProvider>
-        </AuthProvider>
+        </ClerkProvider>
       </body>
     </html>
   );

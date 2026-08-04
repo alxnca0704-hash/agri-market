@@ -1,0 +1,48 @@
+
+> agri-market@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.12 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+- Environments: .env.local
+✓ Ready in 764ms
+
+Attention: Clerk collects telemetry data from its SDKs when connected to development instances.
+The data collected is used to inform Clerk's product roadmap.
+To learn more, including how to opt-out from the telemetry program, visit: https://clerk.com/docs/telemetry.
+
+ GET /profile 200 in 3.2s (next.js: 1305ms, proxy.ts: 770ms, application-code: 1160ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (file://C:/Personal Projects/agri-market/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET /profile/UserProfile_clerk_catchall_check_1785820229389 200 in 454ms (next.js: 19ms, proxy.ts: 18ms, application-code: 416ms)
+ GET /buyer/profile 200 in 252ms (next.js: 58ms, proxy.ts: 10ms, application-code: 184ms)
+ GET /seller/profile 200 in 129ms (next.js: 39ms, proxy.ts: 18ms, application-code: 72ms)
+ GET /profile 307 in 135ms (next.js: 16ms, proxy.ts: 12ms, application-code: 107ms)
+ GET /login 200 in 885ms (next.js: 789ms, proxy.ts: 10ms, application-code: 86ms)
+ GET /buyer/profile 200 in 79ms (next.js: 7ms, proxy.ts: 12ms, application-code: 60ms)
+ GET /buyer/dashboard 200 in 108ms (next.js: 53ms, proxy.ts: 18ms, application-code: 37ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior (file://C:/Personal Projects/agri-market/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET /profile 200 in 1197ms (next.js: 16ms, proxy.ts: 19ms, application-code: 1162ms)
+ GET /profile/UserProfile_clerk_catchall_check_1785820365755 200 in 429ms (next.js: 19ms, proxy.ts: 25ms, application-code: 384ms)
+ GET /buyer/profile 200 in 80ms (next.js: 6ms, proxy.ts: 16ms, application-code: 58ms)
+ GET /seller/profile 200 in 66ms (next.js: 6ms, proxy.ts: 6ms, application-code: 54ms)
+ GET /buyer/profile 200 in 78ms (next.js: 5ms, proxy.ts: 17ms, application-code: 56ms)
+ GET /buyer/profile 200 in 75ms (next.js: 6ms, proxy.ts: 10ms, application-code: 59ms)
+ GET /profile 200 in 798ms (next.js: 16ms, proxy.ts: 11ms, application-code: 771ms)
+[browser] Clerk: Clerk has been loaded with development keys. Development instances have strict usage limits and should not be used when deploying your application to production. Learn more: https://clerk.com/docs/deployments/overview (file://C:/Personal Projects/agri-market/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET /profile/UserProfile_clerk_catchall_check_1785820432807 200 in 418ms (next.js: 17ms, proxy.ts: 15ms, application-code: 386ms)
+ GET /buyer 200 in 2.4s (next.js: 2.3s, proxy.ts: 13ms, application-code: 72ms)
+ GET /seller 200 in 131ms (next.js: 45ms, proxy.ts: 18ms, application-code: 68ms)
+ GET /onboarding 307 in 152ms (next.js: 54ms, proxy.ts: 16ms, application-code: 83ms)
+ GET /profile 307 in 150ms (next.js: 17ms, proxy.ts: 9ms, application-code: 124ms)
+ GET /buyer/profile 200 in 87ms (next.js: 6ms, proxy.ts: 10ms, application-code: 71ms)
+ GET /buyer/dashboard 200 in 682ms (next.js: 15ms, proxy.ts: 614ms, application-code: 53ms)
+[browser] Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior (file://C:/Personal Projects/agri-market/.next/dev/static/chunks/node_modules_next_dist_1ybzpk2._.js:2489:13)
+ GET /profile 200 in 384ms (next.js: 20ms, proxy.ts: 13ms, application-code: 351ms)
+ GET /profile/UserProfile_clerk_catchall_check_1785820551596 200 in 456ms (next.js: 11ms, proxy.ts: 24ms, application-code: 421ms)
+ GET /buyer/dashboard 200 in 59ms (next.js: 7ms, proxy.ts: 13ms, application-code: 40ms)
+ GET /buyer/profile 200 in 47ms (next.js: 5ms, proxy.ts: 20ms, application-code: 22ms)
+ GET /buyer/profile 200 in 45ms (next.js: 6ms, proxy.ts: 17ms, application-code: 23ms)
+ GET /buyer/orders 200 in 116ms (next.js: 60ms, proxy.ts: 24ms, application-code: 32ms)
+ GET /profile 200 in 1232ms (next.js: 21ms, proxy.ts: 18ms, application-code: 1193ms)
+ GET /profile/UserProfile_clerk_catchall_check_1785820675476 200 in 635ms (next.js: 29ms, proxy.ts: 25ms, application-code: 581ms)

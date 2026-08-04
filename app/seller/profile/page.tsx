@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function BuyerProfilePage() {
+export default function SellerProfilePage() {
   redirect("/profile");
 }

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import LoginClient from "@/components/auth/LoginClient";
+import AuthShell from "@/components/auth/AuthShell";
 
 export const metadata: Metadata = { title: "Sign in" };
 
 export default function LoginPage() {
-  return <LoginClient />;
+  return <AuthShell mode="sign-in" />;
 }

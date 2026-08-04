@@ -14,9 +14,10 @@ import {
 } from "@ant-design/icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth";
+import { useClerk, useUser } from "@clerk/nextjs";
 import { useCart } from "@/lib/cart";
 import { useFavorites } from "@/lib/favorites";
+import { getRole } from "@/lib/roles";
 
 interface BuyerHeaderProps {
   onMenuClick: () => void;
@@ -26,7 +27,7 @@ const userMenuItems: MenuProps["items"] = [
   {
     key: "profile",
     icon: <ProfileOutlined />,
-    label: <Link href="/buyer/profile">Profile</Link>,
+    label: <Link href="/profile">Profile</Link>,
   },
   {
     key: "orders",
@@ -58,7 +59,8 @@ function BrandMark() {
 
 export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user } = useUser();
+  const { signOut } = useClerk();
   const { count: cartCount } = useCart();
   const { count: favoriteCount } = useFavorites();
 
@@ -126,8 +128,7 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             items: userMenuItems,
             onClick: ({ key }) => {
               if (key === "logout") {
-                logout();
-                router.push("/login");
+                signOut({ redirectUrl: "/login" });
               }
             },
           }}
@@ -137,13 +138,20 @@ export default function BuyerHeader({ onMenuClick }: BuyerHeaderProps) {
             type="button"
             className="ml-1 flex cursor-pointer items-center gap-2.5 rounded-full p-1 pr-2 transition-colors hover:bg-gray-100/80"
           >
-            <Avatar size={38} className="bg-green-600" icon={<UserOutlined />} />
+            <Avatar
+              size={38}
+              src={user?.imageUrl ?? undefined}
+              className="bg-green-600"
+              icon={<UserOutlined />}
+            />
             <span className="hidden text-left lg:block">
               <span className="block text-sm font-medium leading-tight text-gray-900">
-                {user?.name ?? "Guest"}
+                {user?.fullName ?? "Guest"}
               </span>
               <span className="block text-xs leading-tight text-gray-400">
-                {user ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : "Buyer"}
+                {user
+                  ? getRole(user).charAt(0).toUpperCase() + getRole(user).slice(1)
+                  : "Buyer"}
               </span>
             </span>
           </button>

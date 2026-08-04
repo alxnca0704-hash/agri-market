@@ -1,24 +1,28 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth";
+import { useUser } from "@clerk/nextjs";
+import { getRoleMetadata, ROLE_HOME } from "@/lib/roles";
 
 export default function Home() {
-  const { user, ready } = useAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (!ready) {
+    if (!isLoaded) {
       return;
     }
-    if (!user) {
+    if (!isSignedIn) {
       router.replace("/login");
-    } else if (user.role === "seller") {
-      router.replace("/seller/products");
-    } else {
-      router.replace("/buyer/dashboard");
+      return;
     }
-  }, [ready, user, router]);
+    const role = getRoleMetadata(user);
+    if (role === null) {
+      router.replace("/onboarding");
+    } else {
+      router.replace(ROLE_HOME[role]);
+    }
+  }, [isLoaded, isSignedIn, user, router]);
 
   return null;
 }

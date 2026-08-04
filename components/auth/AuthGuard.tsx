@@ -1,8 +1,8 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/lib/auth";
-import type { Role } from "@/lib/auth-core";
+import { useUser } from "@clerk/nextjs";
+import { getRoleMetadata, type Role } from "@/lib/roles";
 
 export default function AuthGuard({
   role,
@@ -11,19 +11,26 @@ export default function AuthGuard({
   role: Role;
   children: React.ReactNode;
 }) {
-  const { user, ready } = useAuth();
+  const { isLoaded, isSignedIn, user } = useUser();
   const router = useRouter();
 
   useEffect(() => {
-    if (!ready) {
+    if (!isLoaded) {
       return;
     }
-    if (!user || user.role !== role) {
+    if (!isSignedIn) {
+      router.replace("/login");
+      return;
+    }
+    const current = getRoleMetadata(user);
+    if (current === null) {
+      router.replace("/onboarding");
+    } else if (current !== role) {
       router.replace("/login");
     }
-  }, [ready, user, role, router]);
+  }, [isLoaded, isSignedIn, user, role, router]);
 
-  if (!ready || !user || user.role !== role) {
+  if (!isLoaded || !isSignedIn || getRoleMetadata(user) !== role) {
     return null;
   }
 
